@@ -94,7 +94,7 @@ const Login = () => {
         <div className="login-form">
           <form>
           <label className="password">Password</label>
-          <input type="text" id="username"/>
+          <input type="password" id="username"/>
           <div className="checkbox-row">
           </div>
           <button type="submit" onClick={toggleSignIn}>Sign In</button>
