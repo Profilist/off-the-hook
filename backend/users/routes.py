@@ -4,8 +4,6 @@ from datetime import datetime, timedelta, timezone
 import uuid
 import jwt
 from settings import Settings
-from flask_cors import cross_origin
-
 # Load configuration
 config = Settings()
 
@@ -22,7 +20,6 @@ user_routes = Blueprint('mongo_routes', __name__)
 #    - Return a login URL with JWT token
 # --------------------------------------------------------------------------
 @user_routes.route('/generate_login_url/', methods=['POST'])
-@cross_origin()
 def generate_login_url():
     """
     Generate a one-time login URL for the given user.
@@ -119,7 +116,6 @@ def generate_login_url():
 #    - Return user + session info
 # --------------------------------------------------------------------------
 @user_routes.route('/login', methods=['GET'])
-@cross_origin()
 def login():
     """
     Handle auto-login from a JWT token (e.g., accessed via generated URL).
@@ -299,28 +295,33 @@ def fetch_user_and_sessions(user_id):
 
 # called when they input email/pass
 @user_routes.route('/update-loot', methods=['POST'])
-@cross_origin()
 def update_loot():
-    data = request.get_json()
+    try:
+        data = request.get_json()
+            
+        required_fields = ['user_id']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400     
         
-    required_fields = ['user_id']
-    for field in required_fields:
-        if field not in data:
-            return jsonify({'error': f'Missing required field: {field}'}), 400     
-    
-    user = db.user_profiles.find_one({'user_id': data['user_id']})
-    db.user_profiles.update_one(
-        {'user_id' : user['referrer']},
-        {'$inc' : {
-            'loot' : user['balance']
-        }}
-    )
+        user = db.user_profiles.find_one({'user_id': data['user_id']})
+        
+        print(user)
+        
+        db.user_profiles.update_one(
+            {'user_id' : user['referral']},
+            {'$inc' : {
+                'loot' : int(user['balance'])
+            }}
+        )
 
-    return jsonify({'success' : True}), 200
+        return jsonify({'success' : True}), 200
+    except Exception as e:
+        print(f"[ERROR] Exception occurred in update_loot: {str(e)}")
+        return jsonify({'error': str(e)}), 400
     
 
 @user_routes.route('/get-user/<user_id>', methods=['GET'])
-@cross_origin()
 def get_user(user_id):
     """
     Fetch user details by user_id (from user_profiles)
@@ -349,7 +350,6 @@ def get_user(user_id):
 #    - Pull top users from user_profiles (sorted by loot desc).
 # --------------------------------------------------------------------------
 @user_routes.route('/most_loot', methods=['GET'])
-@cross_origin()
 def get_most_loot():
     """
     Fetch users from user_profiles, sorted by 'loot' descending,
