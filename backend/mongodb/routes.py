@@ -20,7 +20,7 @@ mongo_routes = Blueprint('mongo_routes', __name__)
 def generate_login_url(user_id):
     try:
         
-        user = db.users.find_one({'user_id': '94fbc927-93d7-401d-9efe-a95521562ac3'})
+        user = db.users.find_one({'user_id': str(user_id)})
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
@@ -28,14 +28,17 @@ def generate_login_url(user_id):
         session_id = str(uuid.uuid4())
         expiration_time = datetime.now(timezone.utc) + timedelta(days=1)
         # Create a JWT token with user details
+        print("printing JWT secret")
+        print(f"JWT Secret: {config.jwt.secret}")
         token = jwt.encode(
             {
                 'user_id': user_id,
                 'session_id': session_id,
                 'exp': expiration_time
             },
-            config.mongodb.JWTSettings.secret,
-            algorithm=config.mongodb.JWTSettings.algorithm
+                config.jwt.secret,  # <-- FIXED HERE
+    algorithm=config.jwt.algorithm  # <-- FIXED HERE
+
         )
         
         # Update the user document with the new session details
@@ -70,8 +73,8 @@ def login():
         # Decode the JWT token
         data = jwt.decode(
             token,
-            config.mongodb.JWTSettings.secret,
-            algorithms=[config.mongodb.JWTSettings.algorithm]
+            config.jwt.secret,
+            algorithms=[config.jwt.algorithm]
         )
 
         # Find the user in the database
@@ -104,7 +107,7 @@ def login():
 def get_user(user_id):
     try:
         # Find the user in the database
-        user = db.users.find_one({'user_id': user_id})
+        user = db.users.find_one({'user_id': str(user_id)})
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
