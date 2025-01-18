@@ -3,11 +3,14 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta, timezone
 import uuid
 import jwt
-from settings import config
+from settings import Settings
+
+# Load configuration
+config = Settings()
 
 # Initialize MongoDB client and database
 client = MongoClient(config.mongodb.uri)
-db = client[config.mongodb.database_name]
+db = client["db"]
 
 # Create a Flask Blueprint for MongoDB-related routes
 mongo_routes = Blueprint('mongo_routes', __name__)
@@ -16,29 +19,14 @@ mongo_routes = Blueprint('mongo_routes', __name__)
 @mongo_routes.route('/generate_login_url/<user_id>', methods=['GET'])
 def generate_login_url(user_id):
     try:
-        # Debugging: Log the collections in the database
-        collections = db.list_collection_names()
-        print(f"Collections in database: {collections}")
-
-        # Debugging: Log the user_id received
-        print(f"Received user_id: '{user_id}'")
-
-        # Debugging: Log the JWT secret
-        print(f"JWT Secret: '{config.mongodb.jwt_settings.secret}'")
-
-        # Find the user in the database
-        user = db.users.find_one({'user_id': user_id.strip()})
         
-        # Debugging: Log the user found
-        print(f"User found: {user}")
-
+        user = db.users.find_one({'user_id': '94fbc927-93d7-401d-9efe-a95521562ac3'})
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
         # Generate a unique session ID and set expiration time
         session_id = str(uuid.uuid4())
         expiration_time = datetime.now(timezone.utc) + timedelta(days=1)
-
         # Create a JWT token with user details
         token = jwt.encode(
             {
@@ -46,14 +34,10 @@ def generate_login_url(user_id):
                 'session_id': session_id,
                 'exp': expiration_time
             },
-            config.mongodb.jwt_settings.secret,
-            algorithm=config.mongodb.jwt_settings.algorithm
+            config.mongodb.JWTSettings.secret,
+            algorithm=config.mongodb.JWTSettings.algorithm
         )
-
-        # Convert token to string if necessary (for Python 3.6+)
-        if isinstance(token, bytes):
-            token = token.decode('utf-8')
-
+        
         # Update the user document with the new session details
         db.users.update_one(
             {'user_id': user_id},
@@ -72,27 +56,31 @@ def generate_login_url(user_id):
         return jsonify({'login_url': login_url}), 200
 
     except Exception as e:
-        print(f"Error: {e}")
         return jsonify({'error': str(e)}), 400
 
-# Route to handle login using the JWT token
+# Route to handle auto-login using a token
 @mongo_routes.route('/login', methods=['GET'])
 def login():
+    # Extract the token from the query parameters
     token = request.args.get('token')
     if not token:
         return jsonify({'error': 'Token is missing'}), 400
 
     try:
+        # Decode the JWT token
         data = jwt.decode(
             token,
-            config.mongodb.jwt_settings.secret,
-            algorithms=[config.mongodb.jwt_settings.algorithm]
+            config.mongodb.JWTSettings.secret,
+            algorithms=[config.mongodb.JWTSettings.algorithm]
         )
+
+        # Find the user in the database
         user_id = data['user_id']
         user = db.users.find_one({'user_id': user_id})
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
+        # Prepare user information to return
         user_info = {
             'name': f"{user['fname']} {user['lname']}",
             'balance': user['balance'],
@@ -115,15 +103,8 @@ def login():
 @mongo_routes.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
     try:
-        # Debugging: Log the user_id received
-        print(f"Received user_id: '{user_id}'")
-
         # Find the user in the database
-        user = db.users.find_one({'user_id': user_id.strip()})
-        
-        # Debugging: Log the user found
-        print(f"User found: {user}")
-
+        user = db.users.find_one({'user_id': user_id})
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
@@ -142,5 +123,4 @@ def get_user(user_id):
         return jsonify(user_info), 200
 
     except Exception as e:
-        print(f"Error: {e}")
         return jsonify({'error': str(e)}), 400
