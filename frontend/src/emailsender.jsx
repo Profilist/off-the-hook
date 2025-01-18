@@ -25,7 +25,7 @@ const EmailSender = () => {
     setStatus({ loading: true, success: false, error: null });
 
     try {
-      const response = await fetch('http://localhost:5000/email/send', {
+      const response = await fetch('https://rbc-security.onrender.com/email/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
