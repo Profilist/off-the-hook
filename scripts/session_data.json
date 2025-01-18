@@ -1,0 +1,74 @@
+[
+  {
+    "session_id": "a356c75b-858d-47f7-87e3-8928e19b8776",
+    "user_id": "fbac00f7-b45c-41d1-a18f-b322e073acac",
+    "session_token": "21eeead66aac4f3cbdd97ee96d432768",
+    "status": "Active",
+    "login_attempts": 1,
+    "device": "MacBook Pro",
+    "location": "Toronto, ON",
+    "ip_address": "192.168.0.0",
+    "expiration_time": "2025-01-19T15:27:18.534638Z",
+    "last_active": "2025-01-18T15:27:18.534908Z"
+  },
+  {
+    "session_id": "26b17cf7-c106-46f6-9a82-02c2c85f5448",
+    "user_id": "4fc1c421-da25-4ca4-b1ed-77cdb44ca75b",
+    "session_token": "1865622d23ad4fc5bb003ca1d62e4c2f",
+    "status": "Active",
+    "login_attempts": 1,
+    "device": "iPhone 13",
+    "location": "Vancouver, BC",
+    "ip_address": "192.168.0.1",
+    "expiration_time": "2025-01-19T15:27:18.534938Z",
+    "last_active": "2025-01-18T15:27:18.534940Z"
+  },
+  {
+    "session_id": "3b3f252e-8c8d-4e52-9016-d67a991df39c",
+    "user_id": "b42ae8ca-6195-4179-b63d-63895e0205d3",
+    "session_token": "3864a6bc81064c498e0017f229b79874",
+    "status": "Active",
+    "login_attempts": 1,
+    "device": "Windows PC",
+    "location": "Calgary, AB",
+    "ip_address": "192.168.0.2",
+    "expiration_time": "2025-01-19T15:27:18.534956Z",
+    "last_active": "2025-01-18T15:27:18.534958Z"
+  },
+  {
+    "session_id": "b6a96e09-c2c9-4ecb-a7b7-e7fc98642f31",
+    "user_id": "ca70f56b-b543-4bc3-ad03-663b0c2582e3",
+    "session_token": "620f2f0024454cc2a3927995386a1289",
+    "status": "Active",
+    "login_attempts": 1,
+    "device": "Android Phone",
+    "location": "Montreal, QC",
+    "ip_address": "192.168.0.3",
+    "expiration_time": "2025-01-19T15:27:18.534972Z",
+    "last_active": "2025-01-18T15:27:18.534973Z"
+  },
+  {
+    "session_id": "a4f62690-3ade-408c-abac-323ff22dd5d7",
+    "user_id": "fa4c3b1b-2b59-4fc1-9713-793e49ffe25e",
+    "session_token": "2236e361c8f0423b94d73feb7da90b8f",
+    "status": "Active",
+    "login_attempts": 1,
+    "device": "MacBook Pro",
+    "location": "Toronto, ON",
+    "ip_address": "192.168.0.4",
+    "expiration_time": "2025-01-19T15:27:18.534986Z",
+    "last_active": "2025-01-18T15:27:18.534988Z"
+  },
+  {
+    "session_id": "71f7ee94-297f-4b43-bf2a-183386f46e06",
+    "user_id": "79fb3fd9-0e56-4acd-9814-6290d6b12c36",
+    "session_token": "5669c6f95d6e4b0790c9baa88d845498",
+    "status": "Active",
+    "login_attempts": 1,
+    "device": "iPhone 13",
+    "location": "Vancouver, BC",
+    "ip_address": "192.168.0.5",
+    "expiration_time": "2025-01-19T15:27:18.535001Z",
+    "last_active": "2025-01-18T15:27:18.535002Z"
+  }
+]

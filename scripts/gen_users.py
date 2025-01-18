@@ -1,6 +1,7 @@
 import uuid
 import datetime
 import json
+import random
 
 # Predefined unique lists to ensure no duplicates
 FIRST_NAMES = ["John", "Jane", "Alice", "Bob", "Charlie", "Diana", "Evan", "Fiona", "George", "Hannah"]
@@ -9,6 +10,10 @@ ACCOUNT_TYPES = ["Student Chequing", "Savings", "Credit", "Investment"]
 CARD_TYPES = ["Visa Debit", "MasterCard", "AMEX"]
 DEVICES = ["MacBook Pro", "iPhone 13", "Windows PC", "Android Phone"]
 LOCATIONS = ["Toronto, ON", "Vancouver, BC", "Calgary, AB", "Montreal, QC"]
+
+def generate_balance():
+    """Generate a random balance between 1 and 10000."""
+    return round(random.uniform(1, 10000), 2)
 
 def generate_session_token():
     """Generate a unique session token by stripping '-' from a UUID."""
@@ -44,7 +49,10 @@ def generate_user_profiles(user_id, index):
         ],
         "defense_score": defense_score,
         "phished": False if index % 2 == 0 else True,  # Alternating pattern
-        "loot": loot
+        "loot": loot,
+        "referral": "",  # Empty referral upon initialization
+        "victims" : 0,
+        "balance": generate_balance()
     }
     return user_profiles
 
@@ -90,7 +98,7 @@ if __name__ == "__main__":
     with open("user_profiles.json", "w") as f:
         json.dump(profiles, f, indent=2)
     
-    with open("user_sessions.json", "w") as f:
+    with open("session_data.json", "w") as f:
         json.dump(sessions, f, indent=2)
     
     print("Generated 50 unique user profiles and sessions.")

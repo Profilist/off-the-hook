@@ -210,13 +210,21 @@ def login():
                 'user': user_info,
                 'session': session_info
             }), 200
-
-        db.user_profiles.update_one(
-            {'user_id': user['referral']},
-            {'$inc': {
-                'victims': 1
-            }}
-        )
+        
+        # user is the current user 
+        # referrer is the person that referred the current user
+        if not user.get('updated', False):  # If user has not been referred yet
+            db.user_profiles.update_one(
+                {'user_id': user['referral']},
+                {'$inc': {'victims': 1}}
+            )
+            db.user_profiles.update_one(
+                {'user_id': user_id},
+                {'$set': {'updated': True}}
+            )
+        else:
+            print(f"[ERROR] User already referred someone")
+            return jsonify({'error': 'User already referred someone'}), 400
 
         print(f"[DEBUG] Returning combined user & session info")
         return jsonify({
