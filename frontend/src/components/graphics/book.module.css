@@ -20,7 +20,7 @@
   perspective: 4000px;
   perspective-origin: 50% 50%;
   transform: translate3d(0px, 5%, -264px) rotateX(20deg) rotateY(0deg) rotateZ(-8deg);
-  transition: transform 2000ms cubic-bezier(.165, .84, .44, 1);
+  transition: transform 2000ms cubic-bezier(.165, .84, .44, 1), background-color 0.5s ease;
   transform-style: preserve-3d;
 }
 
@@ -37,6 +37,7 @@
   perspective: 4000px;
   transform: translate3d(0px, 0px, -1px);
   transform-style: preserve-3d;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 .bookCoverRight {
@@ -45,6 +46,7 @@
   border-bottom-right-radius: 4%;
   background-color: #158716;
   box-shadow: inset -4px -4px 4px 1px #1a2b25, inset -7px -7px 4px 0 #158716;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 .layer1 {
@@ -136,6 +138,7 @@
     radial-gradient(circle farthest-corner at 56% -8%, #1a2b25 8%, transparent 0),
     radial-gradient(circle farthest-corner at 50% 108%, #1a2b25 8%, transparent 0),
     linear-gradient(90deg, #0a0f0d, #162820 21%, #0a0f0d 30%, #162820 48%, #0a0f0d 68%, #162820 79%, #0a0f0d);
+  transition: background-image 0.5s ease;
 }
 
 .pageText {
@@ -335,4 +338,100 @@
     margin-top: 0;
     font-size: 3vw;
   }
+}
+
+.victimMode .bookCoverLeft {
+  background-color: #871515;
+  box-shadow: inset 4px -4px 4px 1px #2b1a1a, inset 7px -7px 4px 0 #871515;
+}
+
+.victimMode .bookCoverRight {
+  background-color: #871515;
+  box-shadow: inset -4px -4px 4px 1px #2b1a1a, inset -7px -7px 4px 0 #871515;
+}
+
+.hackerMode .bookCoverLeft {
+  background-color: #158716;
+  box-shadow: inset 4px -4px 4px 1px #1a2b25, inset 7px -7px 4px 0 #158716;
+}
+
+.hackerMode .bookCoverRight {
+  background-color: #158716;
+  box-shadow: inset -4px -4px 4px 1px #1a2b25, inset -7px -7px 4px 0 #158716;
+}
+
+.victimMode .center {
+  background-image: 
+    radial-gradient(circle farthest-corner at 56% -8%, #2b1a1a 8%, transparent 0),
+    radial-gradient(circle farthest-corner at 50% 108%, #2b1a1a 8%, transparent 0),
+    linear-gradient(90deg, #0f0a0a, #281616 21%, #0f0a0a 30%, #281616 48%, #0f0a0a 68%, #281616 79%, #0f0a0a);
+}
+
+.hackerMode .center {
+  background-image: 
+    radial-gradient(circle farthest-corner at 56% -8%, #1a2b25 8%, transparent 0),
+    radial-gradient(circle farthest-corner at 50% 108%, #1a2b25 8%, transparent 0),
+    linear-gradient(90deg, #0a0f0d, #162820 21%, #0a0f0d 30%, #162820 48%, #0a0f0d 68%, #162820 79%, #0a0f0d);
+}
+
+.victimText h3 {
+  color: #cc0000;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.hackerText h3 {
+  color: #198617;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+/* Update the page shadows for victim mode */
+.victimMode .pageLeft, .victimMode .pageRight {
+  box-shadow: inset 0 0 30px 6px #d8cccc, -1px 1px 15px 0 rgba(255, 0, 0, 0.1);
+}
+
+/* Keep the existing page shadows for hacker mode */
+.hackerMode .pageLeft, .hackerMode .pageRight {
+  box-shadow: inset 0 0 30px 6px #d8cccc, -1px 1px 15px 0 rgba(0, 255, 0, 0.1);
+}
+
+/* Add transitions for smooth color changes */
+.pageText h3 {
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.bookWrap {
+  transition: transform 2000ms cubic-bezier(.165, .84, .44, 1), background-color 0.5s ease;
+}
+
+/* Update text colors for both modes */
+.victimText h3 {
+  color: #cc0000;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.victimText p {
+  color: #660000;
+  text-shadow: 0 0 2px rgba(255, 0, 0, 0.2);
+}
+
+.hackerText h3 {
+  color: #198617;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+.hackerText p {
+  color: #006600;
+  text-shadow: 0 0 2px rgba(0, 255, 0, 0.2);
+}
+
+/* Add transitions for smooth color changes */
+.pageText h3, .pageText p {
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+/* Override the previous black color for paragraphs */
+.pageText p {
+  margin-bottom: 12px;
+  font-size: 1.1vw;
+  line-height: 1.4;
 }

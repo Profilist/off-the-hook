@@ -51,11 +51,11 @@ export default function Hacked() {
   }, [scrambleText, isHacker]);
 
   const smoothScrollToTop = () => {
-    const duration = 1000; // Duration in milliseconds
+    const duration = 1000;
     const start = window.pageYOffset;
     const startTime = performance.now();
 
-    const easeOutCubic = t => 1 - Math.pow(1 - t, 3); // Cubic easing function
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 
     const animateScroll = (currentTime) => {
       const elapsed = currentTime - startTime;
@@ -95,13 +95,12 @@ export default function Hacked() {
       await new Promise(resolve => setTimeout(resolve, 800));
       setShowTransition(false);
     } else {
+      // Start scroll animation
       smoothScrollToTop();
       
-      // Wait for scroll animation to complete before changing state
-      setTimeout(() => {
-        setIsHacker(true);
-        setSubText("Time to teach others the same lesson - for educational purposes only.");
-      }, 1000);
+      // Update states immediately
+      setIsHacker(true);
+      setSubText("Now it's time to teach others to not make the same mistake.");
     }
   };
 
