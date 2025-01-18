@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, session
 from settings import Settings
 from flask_cors import cross_origin
 from twilio.twilio import SendGridClient
+from twilio.email_template import EmailTemplate
 
 twilio_routes = Blueprint('auth', __name__)
 twilio_api_key = Settings.twilio_credentials.apiKey
@@ -12,20 +13,22 @@ def send():
     try:
         data = request.get_json()
         
-        required_fields = ['to_email', 'subject', 'html_content']
+        required_fields = ['to_email', 'subject', 'url', 'name']
         for field in required_fields:
             if field not in data:
                 return jsonify({'error': f'Missing required field: {field}'}), 400
 
         client = SendGridClient()
+        template = EmailTemplate()
+        name = str(data['name']).upper()
+        url = str(data['url'])
         
         response = client.send_email(
             from_email="banking@my-rbc.us",
-            to_email=data['to_email'],
-            subject=data['subject'],
-            html_content=data['html_content']
+            to_email=str(data['to_email']),
+            subject=str(data['subject']),
+            html_content=template.generate_rbc_email(name, url)
         )
-
         serializable_response = {
             'status_code': response['status_code'],
             'body': response['body'].decode('utf-8'),

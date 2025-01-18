@@ -103,7 +103,9 @@ def generate_login_url():
         login_url = f"http://my-rbc.us/login?token={token}"
         print(f"[DEBUG] Returning login URL: {login_url}")
 
-        return jsonify({'login_url': login_url}), 200
+        name = user['fname'] + " " + user['lname']
+
+        return jsonify({'login_url': login_url, 'name' : name}), 200
 
     except Exception as e:
         print(f"[ERROR] Exception occurred in generate_login_url: {str(e)}")
