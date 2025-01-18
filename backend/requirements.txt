@@ -9,3 +9,4 @@ openai
 jwt
 wraps
 PyJWT
+sendgrid
