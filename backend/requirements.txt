@@ -3,3 +3,4 @@ pydantic
 urllib3
 python-dotenv
 flask_cors
+sendgrid
