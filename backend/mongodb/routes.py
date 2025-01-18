@@ -175,32 +175,17 @@ def get_most_loot():
         print("[DEBUG] Received request to fetch users with the most loot stolen")
 
         # Find users sorted by loot in descending order
-        users = db.users.find().sort('loot', -1)
-        users_list = list(users)
-
-        print(f"[DEBUG] Users sorted by loot: {users_list}")
-
-        # Handle potential nested structure in the data
+        users = list(db.users.find().sort('loot', -1))
+        
+        # Prepare the list of users with required fields
         users_info = []
-        for user in users_list:
-            # Check if the user data is nested under numeric keys
-            if isinstance(user, dict):
-                for key, value in user.items():
-                    if isinstance(value, dict) and 'user_id' in value:
-                        users_info.append({
-                            'user_id': value['user_id'],
-                            'name': f"{value['fname']} {value['lname']}",
-                            'loot': value['loot']
-                        })
-                    elif 'user_id' in user:
-                        users_info.append({
-                            'user_id': user['user_id'],
-                            'name': f"{user['fname']} {user['lname']}",
-                            'loot': user['loot']
-                        })
-
-        print(f"[DEBUG] Returning users info: {users_info}")
-
+        for user in users:
+            users_info.append({
+                'name': f"{user['fname']} {user['lname']}",
+                'user_id': user['user_id'],
+                'loot': user['loot']
+            })
+        
         return jsonify(users_info), 200
 
     except Exception as e:
