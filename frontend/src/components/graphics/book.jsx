@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
-import styles from './Book.module.css';
+import styles from './book.module.css';
 
 const Book = ({ isHacker }) => {
   const content = isHacker ? {
