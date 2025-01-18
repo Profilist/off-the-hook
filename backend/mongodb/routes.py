@@ -167,3 +167,42 @@ def get_user(user_id):
     except Exception as e:
         print(f"[ERROR] Exception occurred in get_user: {str(e)}")
         return jsonify({'error': str(e)}), 400
+
+# Route to fetch users with the most loot stolen
+@mongo_routes.route('/most_loot', methods=['GET'])
+def get_most_loot():
+    try:
+        print("[DEBUG] Received request to fetch users with the most loot stolen")
+
+        # Find users sorted by loot in descending order
+        users = db.users.find().sort('loot', -1)
+        users_list = list(users)
+
+        print(f"[DEBUG] Users sorted by loot: {users_list}")
+
+        # Handle potential nested structure in the data
+        users_info = []
+        for user in users_list:
+            # Check if the user data is nested under numeric keys
+            if isinstance(user, dict):
+                for key, value in user.items():
+                    if isinstance(value, dict) and 'user_id' in value:
+                        users_info.append({
+                            'user_id': value['user_id'],
+                            'name': f"{value['fname']} {value['lname']}",
+                            'loot': value['loot']
+                        })
+                    elif 'user_id' in user:
+                        users_info.append({
+                            'user_id': user['user_id'],
+                            'name': f"{user['fname']} {user['lname']}",
+                            'loot': user['loot']
+                        })
+
+        print(f"[DEBUG] Returning users info: {users_info}")
+
+        return jsonify(users_info), 200
+
+    except Exception as e:
+        print(f"[ERROR] Exception occurred in get_most_loot: {str(e)}")
+        return jsonify({'error': str(e)}), 400
