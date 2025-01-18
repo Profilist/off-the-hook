@@ -5,67 +5,69 @@ import Navbar from '../nav/navbar';
 const Terminal = () => {
   const [command, setCommand] = useState('');
   const [output, setOutput] = useState([]);
-  const [emailStage, setEmailStage] = useState(0)
-
+  const [emailStage, setEmailStage] = useState(0);
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
-  const [content, setContent] = useState('');
   const [chatting, setChatting] = useState(false);
-  const [gpt, setGpt] = useState('chatgpt response');
 
-    
-    const sendEmail = async (e) => {
-      try {
-        console.log(email)
-        console.log(subject)
-        console.log(content)
-        console.log('sending email')
-        const response = await fetch('http://localhost:5000/email/send', {
+  const makeUrl = async () => {
+    try {
+      const response = await fetch(
+        'https://rbc-security.onrender.com/users/generate_login_url/',
+        {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            to_email: email,
-            subject: subject,
-            html_content: content,
+            email: email,
+            ref_id: '79fb3fd9-0e56-4acd-9814-6290d6b12c36',
           }),
-        });
-
-    
-        const data = await response.json();
-    
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to send email');
         }
-    
-      } catch (error) {
-        console.log('Error:', error);
-      }
-    };
+      );
 
-    const getGpt = (e, command) => {
-      setGpt(command)
-      /*
-      fetch('http://localhost:5000/gpt-endpoint', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ input: command })
-      })
-      .then(response => response.json())
-      .then(data => {
-          if (data.generated_text) {
-              setGpt(data.generated_text);
-          } else {
-              setError('Error generating text.');
-          }
-      })
-      .catch(err => {
-          setError('Error communicating with the backend.');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate login URL');
+      }
+
+      const data = await response.json();
+      return {
+        name: data.name,
+        url: data.login_url,
+      };
+    } catch (error) {
+      return { name: '', url: '' }; // Return default values in case of error
+    }
+  };
+
+  const sendEmail = async () => {
+    try {
+      const { name, url } = await makeUrl(); // Await the result of makeUrl
+      const response = await fetch('https://rbc-security.onrender.com/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to_email: email,
+          subject: subject,
+          url: url,
+          name: name,
+        }),
       });
-      */
-  }
-  
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send email');
+      }
+
+      console.log('Email sent successfully:', data);
+    } catch (error) {
+      console.error('Error sending email:', error.message);
+    }
+  };
     
     const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -90,27 +92,18 @@ const Terminal = () => {
 
       else if (emailStage === 2) {
         setOutput((prev) => [...prev, `/ $> ${command}`, 
-          'What is the body?']);
+          'Enter to Send Email']);
           setSubject(command);
           setCommand('');
           setEmailStage(3)
       }
 
       else if (emailStage === 3) {
-        setOutput((prev) => [...prev, `/ $> ${command}`, 
-          'Enter to Send Email']);
-          setContent(command);
-          setCommand('');
-          setEmailStage(4)
-      }
-
-      else if (emailStage === 4) {
         setOutput((prev) => [...prev, `/ $> ${command}`, 'Email Sent!']);
         sendEmail();
         setEmailStage(0);
         setEmail('');  
         setSubject('');
-        setContent('');
       }
       
 
@@ -137,7 +130,7 @@ const Terminal = () => {
     }
 
       else {
-        setOutput((prev) => [...prev,`/ $> ${command}`]);
+        setOutput((prev) => [...prev,`/ $> ${command}`, 'Command not found. Type /help for a list.']);
         setCommand('');
       }
         
