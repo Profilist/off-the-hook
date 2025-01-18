@@ -16,6 +16,14 @@ export default function Hacked() {
   const [showTransition, setShowTransition] = useState(false);
   const [showHackerPerspective, setShowHackerPerspective] = useState(false);
 
+  useEffect(() => {
+    document.title = "Off The Hook";
+    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.rel = 'icon';
+    link.href = '/OffTheHook.png';
+    document.head.appendChild(link);
+  }, []);
+
   const scrambleText = useCallback(() => {
     let iteration = 0;
     const originalText = isHacker ? "WELCOME HACKER" : "YOU GOT HACKED";
