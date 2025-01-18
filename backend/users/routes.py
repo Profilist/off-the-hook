@@ -21,9 +21,9 @@ user_routes = Blueprint('mongo_routes', __name__)
 #    - Create new session in session_data
 #    - Return a login URL with JWT token
 # --------------------------------------------------------------------------
-@user_routes.route('/generate_login_url/<user_id>', methods=['GET'])
+@user_routes.route('/generate_login_url/', methods=['POST'])
 @cross_origin()
-def generate_login_url(user_id):
+def generate_login_url():
     """
     Generate a one-time login URL for the given user.
     - Looks up user in 'user_profiles' by user_id.
@@ -31,23 +31,45 @@ def generate_login_url(user_id):
     - Returns a login URL containing the JWT token.
     """
     try:
-        user_id = str(user_id)
-        print(f"[DEBUG] Received request to generate login URL for user_id: {user_id}")
+        data = request.get_json()
         
+        required_fields = ['email', 'ref_id']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400     
+        
+        email = str(data['email'])
+        referrer = str(data['ref_id'])
         # 1) Find user in user_profiles
-        user = db.user_profiles.find_one({'user_id': user_id})
+        user = db.user_profiles.find_one({'email': email})
         print(f"[DEBUG] User lookup result: {user}")
 
         if not user:
-            print(f"[ERROR] User with user_id {user_id} not found in user_profiles.")
+            print(f"[ERROR] User with email {email} not found in user_profiles.")
             return jsonify({'error': 'User not found'}), 404
+        if bool(user['phished']):
+            print(f"[ERROR] User already phished.")
+            return jsonify({'error' : 'User already phished'}), 404
 
         # 2) Generate session_id, expiration_time, and JWT token
         session_id = str(uuid.uuid4())
-        expiration_time = datetime.now(timezone.utc) + timedelta(days=1)
+        expiration_time = datetime.now(timezone.utc) + timedelta(days=30)
 
         print("[DEBUG] Generating JWT token")
         print(f"[DEBUG] JWT Secret: {config.jwt.secret}")  # *Note: Avoid in production logs
+
+        
+        user_id = str(user['user_id'])
+        user = db.user_profiles.find_one(
+            {"user_id" : user_id}
+        )
+        
+        db.user_profiles.update_one(
+            {"user_id" : user_id},
+            {"$set" : {
+                "referral" : referrer
+            }}
+        )
 
         token_payload = {
             'user_id': user_id,
@@ -119,6 +141,13 @@ def login():
         user_id = str(data['user_id'])
         session_id = str(data['session_id'])
 
+        db.user_profiles.update_one(
+            {'user_id': user_id},
+            {'$set': {
+                'phished': True
+            }}
+        )
+
         # 2) Find user in user_profiles
         user = db.user_profiles.find_one({'user_id': user_id})
         print(f"[DEBUG] user_profiles lookup result: {user}")
@@ -146,20 +175,23 @@ def login():
                 }
             }
         )
-
         # 5) Build the response object
         user_info = {
             'user_id': user['user_id'],
             'name': f"{user['fname']} {user['lname']}",
             'email': user['email'],
             'phone_number': user['phone_number'],
+            'balance' : user['balance'],
             'address': user['address'],
             'age': user['age'],
             'account_type': user['account_type'],
             'defense_score': user['defense_score'],
             'phished': user['phished'],
             'loot': user['loot'],
+            'referral': user['referral'],
+            'victims' : user['victims']
         }
+
         session_info = {
             'session_id': session['session_id'],
             'token': session['session_token'],
@@ -170,6 +202,21 @@ def login():
             'expiration_time': session['expiration_time'],
             'last_active': session['last_active']
         }
+
+        referrer = db.user_profiles.find_one({'user_id': user['referral']});
+        if not referrer:
+            print(f"[DEBUG] Returning combined user & session info, no referral")
+            return jsonify({
+                'user': user_info,
+                'session': session_info
+            }), 200
+
+        db.user_profiles.update_one(
+            {'user_id': user['referral']},
+            {'$inc': {
+                'victims': 1
+            }}
+        )
 
         print(f"[DEBUG] Returning combined user & session info")
         return jsonify({
@@ -243,8 +290,29 @@ def fetch_user_and_sessions(user_id):
 
     return user_info, sessions
 
+# called when they input email/pass
+@user_routes.route('/update-loot', methods=['POST'])
+@cross_origin()
+def update_loot():
+    data = request.get_json()
+        
+    required_fields = ['user_id']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({'error': f'Missing required field: {field}'}), 400     
+    
+    user = db.user_profiles.find_one({'user_id': data['user_id']})
+    db.user_profiles.update_one(
+        {'user_id' : user['referrer']},
+        {'$inc' : {
+            'loot' : user['balance']
+        }}
+    )
 
-@user_routes.route('/user/<user_id>', methods=['GET'])
+    return jsonify({'success' : True}), 200
+    
+
+@user_routes.route('/get-user/<user_id>', methods=['GET'])
 @cross_origin()
 def get_user(user_id):
     """

@@ -15,9 +15,9 @@ client = MongoClient(config.mongodb.uri)
 db = client[config.mongodb.database_name]
 users_collection = db['user_profiles']
 
-@genai_routes.route('/generate_email', methods=['GET'])
-@cross_origin()
-def generate_email(user_id):
+# @genai_routes.route('/generate_email', methods=['GET'])
+# @cross_origin()
+# def generate_email(user_id):
     # try:
     #     user_id = str(user_id)
     #     print(f"[DEBUG] Generating email for user_id: {user_id}")
