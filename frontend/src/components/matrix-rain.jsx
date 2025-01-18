@@ -17,7 +17,7 @@ const MatrixRain = () => {
 
     const fontSize = 16;
     const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(0);
+    const drops = Array(columns).fill(-1);
     
     const str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
 
@@ -28,21 +28,19 @@ const MatrixRain = () => {
       context.fillStyle = "#00cc33";
 
       for(let i = 0; i < columns; i++) {
-        const index = Math.floor(Math.random() * str.length);
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-        
-        if (y >= 0 && y < canvas.height) {
+        if (drops[i] >= 0) {
+          const index = Math.floor(Math.random() * str.length);
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
           context.fillText(str[index], x, y);
         }
 
-        if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        if(drops[i] * fontSize >= canvas.height && Math.random() > 0.99) {
+          drops[i] = 0;
+        } else if (Math.random() > 0.99 && drops[i] < 0) {
           drops[i] = 0;
         }
-        
-        if (Math.random() > 0.975) {
-          drops[i]++;
-        }
+        drops[i]++;
       }
     };
 
