@@ -1,13 +1,19 @@
 import React from 'react'
 import './leaderboard.css'
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 const Leaderboard = () => {
-  const totalLoot = useSelector((state) => state.data);
-  const numberOfEntries = 1
-  const data = []
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+      fetch('http://localhost:5000/users/most_loot')
+        .then((response) => response.json())
+        .then((data) => setData(data));
+  }, []);
+    
+  const totalLoot = data.reduce((acc, row) => acc + row.loot, 0);
+  const numberOfEntries = data.length;
+   
   return (
     <>
     <div className='leaderboard'>

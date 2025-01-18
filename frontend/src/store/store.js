@@ -3,7 +3,7 @@ import { createStore } from 'redux';
 
 // Define initial state
 const initialState = {
-  data: null,
+  data: [],
 };
 
 // Define actions
