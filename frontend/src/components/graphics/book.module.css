@@ -6,6 +6,8 @@
   align-items: stretch;
   perspective: 4000px;
   perspective-origin: 50% 0%;
+  margin-top: -6vw;
+  margin-bottom: -6vw;
 }
 
 .bookWrap {
