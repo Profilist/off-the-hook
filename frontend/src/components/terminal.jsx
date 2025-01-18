@@ -20,11 +20,11 @@ const Terminal = () => {
 
   return (
     <div className='terminalWrap'>
-
-    
     <div className="terminal">
-        <h1 style={{fontWeight: "bold"}}>Scam Some People</h1>
-      <div className="output">
+        <div class="typewriter">
+            <h1>Now it's your turn to scam some people.</h1>
+        </div>
+    <div className="output">
         {output.map((line, index) => (
           <p key={index}>{line}</p>
         ))}
