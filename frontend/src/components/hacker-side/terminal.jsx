@@ -10,9 +10,11 @@ const Terminal = () => {
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
+  const [chatting, setChatting] = useState(false);
+  const [gpt, setGpt] = useState('chatgpt response');
 
     
-    const handleSubmit = async (e) => {
+    const sendEmail = async (e) => {
       try {
         console.log(email)
         console.log(subject)
@@ -42,8 +44,29 @@ const Terminal = () => {
       }
     };
 
- 
-
+    const getGpt = (e, command) => {
+      setGpt(command)
+      /*
+      fetch('http://localhost:5000/gpt-endpoint', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ input: command })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.generated_text) {
+              setGpt(data.generated_text);
+          } else {
+              setError('Error generating text.');
+          }
+      })
+      .catch(err => {
+          setError('Error communicating with the backend.');
+      });
+      */
+  }
+  
+    
     const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       if (command === '/help') {
@@ -83,11 +106,11 @@ const Terminal = () => {
 
       else if (emailStage === 4) {
         setOutput((prev) => [...prev, `/ $> ${command}`, 'Email Sent!']);
-        handleSubmit();
+        sendEmail();
         setEmailStage(0);
-        setEmail('');  // Reset email
-        setSubject(''); // Reset subject
-        setContent(''); // Reset content
+        setEmail('');  
+        setSubject('');
+        setContent('');
       }
       
 
@@ -95,7 +118,23 @@ const Terminal = () => {
         setOutput((prev) => [...prev, `/ $> ${command}`, 
           'Hello, I am the Scam Bot. I am here to teach you how to scam people. Do you have any questions?']);
           setCommand('');
+          setChatting(true);
       }
+
+      else if (command === 'quit' && chatting) {
+          setOutput((prev) => [...prev, `/ $> ${command}`, 
+          'See you soon!']);
+          setCommand('');
+          setChatting(false)
+      }
+
+      else if (chatting) {
+        getGpt((prev) => [...prev, `/ $> ${command}`, 
+          'See you soon!'])
+        setOutput((prev) => [...prev, `/ $> ${command}`, 
+        gpt]);
+        setCommand('');
+    }
 
       else {
         setOutput((prev) => [...prev,`/ $> ${command}`]);
@@ -108,7 +147,7 @@ const Terminal = () => {
     
       setCommand((prev) => prev + e.key);
     }
-  };
+    };
 
   return (
     <div className='terminalWrap'>

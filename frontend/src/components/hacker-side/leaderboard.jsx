@@ -1,21 +1,21 @@
 import React from 'react'
 import './leaderboard.css'
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const Leaderboard = () => {
-    const [data, setData] = useState([]);
-    useEffect(() => {
-      fetch('http://localhost:5000/mongo/most_loot')
-        .then((response) => response.json())
-        .then((data) => setData(data));
-    }, []);
-    
-   
+  const totalLoot = useSelector((state) => state.data);
+  const numberOfEntries = 1
+  const data = []
+
   return (
     <>
     <div className='leaderboard'>
         <div className='rankings'>
             <h1>Hacker Rankings</h1>
+            <h1>Loot: {totalLoot}</h1>
+            <h1>Length: {numberOfEntries}</h1>
+            <h1>Avg: {totalLoot / numberOfEntries}</h1>
             <table>
               <thead>
                 <tr>

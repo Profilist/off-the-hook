@@ -1,8 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../nav/navbar';
+import { useSelector } from 'react-redux';
+import LoadStats from '../../store/loadstats';
 
 const Statistics = () => {
+  const data = useSelector((state) => state.data);
+  
   // Hardcoded statistics for now
   const stats = {
     totalMoney: 1234567.89,
@@ -24,7 +28,7 @@ const Statistics = () => {
         >
           <StatCard
             title="Total Money Stolen"
-            value={`$${stats.totalMoney.toLocaleString()}`}
+            value={data}
           />
           <StatCard
             title="Total Victims"
