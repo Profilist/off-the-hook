@@ -6,12 +6,15 @@ const Terminal = () => {
   const [output, setOutput] = useState([]);
 
   const handleKeyPress = (e) => {
+    
     if (e.key === 'Enter') {
-      setOutput((prev) => [...prev, `/ $> ${command}`]);
+    
+      setOutput((prev) => [...prev, `$ ${command}`]);
       setCommand('');
     } else if (e.key === 'Backspace') {
       setCommand((prev) => prev.slice(0, -1));
-    } else {
+    } else if (e.key.length === 1) { 
+    
       setCommand((prev) => prev + e.key);
     }
   };
