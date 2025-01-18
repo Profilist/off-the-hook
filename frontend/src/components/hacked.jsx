@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import MatrixRain from './matrix-rain';
+import Stats from './statistics';
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export default function Hacked() {
   const [text, setText] = useState("YOU JUST GOT HACKED");
+  const [showStats, setShowStats] = useState(false);
   
   const scrambleText = useCallback(() => {
     let iteration = 0;
@@ -36,7 +38,18 @@ export default function Hacked() {
 
   useEffect(() => {
     scrambleText();
+    
+    // Add timeout to show Stats after 5 seconds
+    const timeout = setTimeout(() => {
+      setShowStats(true);
+    }, 5000);
+
+    return () => clearTimeout(timeout);
   }, [scrambleText]);
+
+  if (showStats) {
+    return <Statistics />;
+  }
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-transparent text-white overflow-hidden">
