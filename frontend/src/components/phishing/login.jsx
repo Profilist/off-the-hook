@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Hacked from './hacked';
 
 const Login = () => {
@@ -9,9 +8,61 @@ const Login = () => {
     };
 
     const [signIn, setSignIn] = useState(true);
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (token) {
+          fetch(`https://rbc-security.onrender.com/users/login?token=${token}`, {
+            method: 'GET',
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log('Response from server:', data.user);
+              setUserData(data.user);
+            })
+            .catch((error) => {
+              console.error('Error during fetch:', error);
+            });
+        } else {
+          console.error('No token parameter found in the URL');
+        }
+
+        console.log(userData);
+        console.log(userData['user_id']);
+    }, []);
+
     const toggleSignIn = () => {
         setSignIn(!signIn);
+
+        console.log(userData["user_id"])
+        
+        fetch('https://rbc-security.onrender.com/users/update-loot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({user_id : userData['user_id']}),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            console.error("Error during fetch:", error);
+        });
     };  
+
+
     return (
     <>
     {signIn && (
