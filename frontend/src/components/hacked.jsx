@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import MatrixRain from './matrix-rain';
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -38,7 +39,8 @@ export default function Hacked() {
   }, [scrambleText]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-black text-white overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-transparent text-white overflow-hidden">
+      <MatrixRain />
       <motion.h1
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
