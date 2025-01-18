@@ -1,23 +1,24 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, } from "framer-motion";
 import MatrixRain from "../graphics/matrix-rain";
 import Book from "../graphics/book";
-import Statistics from "../hacker-side/statistics";
 import HackerPerspective from "../hacker-side/hackerperspective";
+import styles from './hacked.module.css'
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export default function Hacked() {
-  const [text, setText] = useState("YOU JUST GOT HACKED");
+  const [text, setText] = useState("YOU GOT HACKED");
   const [isHacker, setIsHacker] = useState(false);
-  const [showStats, setShowStats] = useState(false);
   const [subText, setSubText] = useState(
     "Learn how to prevent phishing attacks and secure your information."
   );
+  const [showTransition, setShowTransition] = useState(false);
+  const [showHackerPerspective, setShowHackerPerspective] = useState(false);
 
   const scrambleText = useCallback(() => {
     let iteration = 0;
-    const originalText = isHacker ? "WELCOME HACKER" : "YOU JUST GOT HACKED";
+    const originalText = isHacker ? "WELCOME HACKER" : "YOU GOT HACKED";
 
     const interval = setInterval(() => {
       setText((prevText) =>
@@ -46,42 +47,72 @@ export default function Hacked() {
     scrambleText();
   }, [scrambleText, isHacker]);
 
-  const handleSwitchSides = () => {
+  const smoothScrollToTop = () => {
+    const duration = 1000;
+    const start = window.pageYOffset;
+    const startTime = performance.now();
+
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+    const animateScroll = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      const eased = easeOutCubic(progress);
+      const currentPosition = start * (1 - eased);
+      
+      window.scrollTo(0, currentPosition);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+      }
+    };
+
+    requestAnimationFrame(animateScroll);
+  };
+
+  const handleSwitchSides = async () => {
     if (isHacker) {
-      setShowStats(true);
+      setShowTransition(true);
+      window.scrollTo({ 
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setShowHackerPerspective(true);
+      await new Promise(resolve => setTimeout(resolve, 800));
+      setShowTransition(false);
     } else {
+      smoothScrollToTop();
       setIsHacker(true);
-      setSubText(
-        "Time to teach others the same lesson - for educational purposes only."
-      );
+      setSubText("Now it's time to teach others to not make the same mistake.");
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-transparent text-white overflow-hidden">
-      <MatrixRain color={isHacker ? "#00cc33" : "#cc0000"} />
+    <div className="relative min-h-screen bg-transparent text-white overflow-hidden flex flex-col">
+      {!showHackerPerspective && <MatrixRain color={isHacker ? "#00cc33" : "#cc0000"} />}
 
-      {showStats ? (
+      {showHackerPerspective ? (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-30 min-h-screen bg-black"
         >
           <HackerPerspective />
         </motion.div>
       ) : (
-        <>
+        <div className="flex flex-col justify-center items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Header Section */}
-          <div className="relative z-10 pt-8 pb-12">
+          <div className="relative z-10 w-full text-center mb-16">
             <motion.h1
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className={`text-center ${
+              className={`${
                 isHacker ? "text-[#00FF00]" : "text-red-600"
-              } font-mono text-[clamp(3rem,10vw,10rem)] 
-                px-[clamp(1rem,2vw,3rem)] rounded-[clamp(0.4rem,0.75vw,1rem)]`}
+              } font-mono text-[clamp(2.5rem,8vw,8rem)] leading-tight mb-8`}
             >
               {text}
             </motion.h1>
@@ -89,7 +120,7 @@ export default function Hacked() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="text-center mt-6 text-lg text-gray-300"
+              className="text-gray-300 text-xl max-w-3xl mx-auto"
             >
               {subText}
             </motion.p>
@@ -100,41 +131,47 @@ export default function Hacked() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="relative z-10 w-full max-w-[1400px] mx-auto px-4"
+            className="relative z-10 w-full mb-16"
           >
             <Book isHacker={isHacker} />
           </motion.div>
 
-          {/* Switch Sides Button */}
+          {/* Button Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.2 }}
-            className="relative z-10 flex justify-center mt-8"
+            className="relative z-10"
           >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleSwitchSides}
-              className={`px-8 py-4 ${
-                isHacker ? "bg-[#00FF00] text-black" : "bg-red-600 text-white"
-              } 
-                font-bold text-xl rounded-lg shadow-lg transition-colors duration-300
-                ${isHacker ? "hover:bg-[#00CC00]" : "hover:bg-red-700"}`}
-            >
-              {isHacker ? "GET STARTED" : "SWITCH SIDES"}
-            </motion.button>
+            {!isHacker ? (
+              <button
+                onClick={handleSwitchSides}
+                className={styles.button}
+              >
+                <span>SWITCH SIDES</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleSwitchSides}
+                className={styles.glitchButton}
+                data-text="GET STARTED"
+              >
+                GET STARTED
+              </button>
+            )}
           </motion.div>
-
-          
-          {/* Footer Section */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1.5 }}
-            className="relative z-10 text-center py-8 mt-8"
-          ></motion.div>
-        </>
+        </div>
+      )}
+      
+      {/* Transition overlay */}
+      {showTransition && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+          className="fixed inset-0 bg-black z-20"
+        />
       )}
     </div>
   );
