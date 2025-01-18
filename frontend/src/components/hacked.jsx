@@ -48,7 +48,7 @@ export default function Hacked() {
   }, [scrambleText]);
 
   if (showStats) {
-    return <Statistics />;
+    return <Stats />;
   }
 
   return (
