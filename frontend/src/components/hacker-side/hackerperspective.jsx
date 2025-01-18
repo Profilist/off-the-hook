@@ -1,6 +1,7 @@
 import React from 'react'
+import { motion } from 'framer-motion';
 import Navbar from '../nav/navbar';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Statistics from './statistics';
 import Terminal from './terminal';
 import Leaderboard from './leaderboard';
@@ -20,10 +21,22 @@ const HackerPerspective = () => {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-black"
+    >
       <Navbar setPage={setPage} />
-      <div className="page-content">{renderPage()}</div>
-    </div>
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        className="page-content"
+      >
+        {renderPage()}
+      </motion.div>
+    </motion.div>
   );
   
 }

@@ -58,7 +58,7 @@ const Book = ({ isHacker }) => {
     }
   } : {
     leftPage: {
-      title: "Spot Fake Banking Emails",
+      title: "Spot Fake Emails",
       tips: [
         "Check sender's email address carefully - banks use official domains",
         "Be wary of urgent or threatening language",
@@ -81,7 +81,7 @@ const Book = ({ isHacker }) => {
 
   return (
     <div className={styles.scene}>
-      <div className={styles.bookWrap}>
+      <div className={`${styles.bookWrap} ${isHacker ? styles.hackerMode : styles.victimMode}`}>
         <div className={styles.leftSide}>
           <div className={styles.bookCoverLeft}></div>
           {/* Add layered pages */}
@@ -92,7 +92,7 @@ const Book = ({ isHacker }) => {
           ))}
           <div className={styles.layerText}>
             <div className={styles.pageLeft2}>
-              <div className={styles.pageText}>
+              <div className={`${styles.pageText} ${isHacker ? styles.hackerText : styles.victimText}`}>
                 <h3>{phishingTips.leftPage.title}</h3>
                 {phishingTips.leftPage.tips.map((tip, index) => (
                   <p key={index}>{tip}</p>
@@ -106,7 +106,6 @@ const Book = ({ isHacker }) => {
         
         <div className={styles.rightSide}>
           <div className={styles.bookCoverRight}></div>
-          {/* Add layered pages */}
           {[1, 2, 3, 4].map(layer => (
             <div key={`layer${layer}-right`} className={`${styles[`layer${layer}`]} ${styles.right}`}>
               <div className={styles.pageRight}></div>
@@ -114,7 +113,7 @@ const Book = ({ isHacker }) => {
           ))}
           <div className={`${styles.layerText} ${styles.right}`}>
             <div className={styles.pageRight2}>
-              <div className={styles.pageText}>
+              <div className={`${styles.pageText} ${isHacker ? styles.hackerText : styles.victimText}`}>
                 <h3>{phishingTips.rightPage.title}</h3>
                 {phishingTips.rightPage.tips.map((tip, index) => (
                   <p key={index}>{tip}</p>
