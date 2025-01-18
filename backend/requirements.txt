@@ -8,3 +8,4 @@ mongo
 openai
 jwt
 wraps
+PyJWT

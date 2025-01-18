@@ -13,4 +13,3 @@ app.register_blueprint(mongo_routes, url_prefix='/mongo')
 @app.route('/')
 def index():
     return "test"
-
