@@ -48,8 +48,8 @@ export default function Hacked() {
   }, [scrambleText, isHacker]);
 
   const smoothScrollToTop = () => {
-    const duration = 1000;
     const start = window.pageYOffset;
+    const duration = 1000;
     const startTime = performance.now();
 
     const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
@@ -74,7 +74,7 @@ export default function Hacked() {
   const handleSwitchSides = async () => {
     if (isHacker) {
       setShowTransition(true);
-      window.scrollTo({ 
+      window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: 'smooth'
       });

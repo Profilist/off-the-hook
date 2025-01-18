@@ -30,15 +30,16 @@
   
   .button span {
     position: absolute;
-    width: 80%; /* Reduced width to fit within mask */
-    font-size: 20px; /* Increased font size */
-    font-weight: 300; /* Slightly increased weight for better visibility */
+    width: 80%; 
+    font-size: 1.25rem; 
+    font-weight: 600; 
     left: 50%;
     top: 39%;
     letter-spacing: 3px;
     text-align: center;
     transform: translate(-50%,-50%);
-    color: #ff0000; /* Changed to red */
+    box-shadow: #ff0000;
+    color: #ff0000; 
     transition: all 2s ease;
   }
   
@@ -64,7 +65,9 @@
 
   .glitchButton {
     padding: 10px 50px;
-    font-size: 20px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 3px;
     border: none;
     border-radius: 5px;
     color: white;
