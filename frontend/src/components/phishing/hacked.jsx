@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import MatrixRain from "./matrix-rain";
-import Book from "./book";
-import Statistics from "./statistics";
+import MatrixRain from "../graphics/matrix-rain";
+import Book from "../graphics/book";
+import Statistics from "../hacker-side/statistics";
+import HackerPerspective from "../hacker-side/hackerperspective";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -67,7 +68,7 @@ export default function Hacked() {
           transition={{ duration: 0.5 }}
           className="relative z-10"
         >
-          <Statistics />
+          <HackerPerspective />
         </motion.div>
       ) : (
         <>
