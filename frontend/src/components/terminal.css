@@ -1,0 +1,40 @@
+.terminal {
+  background-color: #000;
+  color: #0f0;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 40px;
+
+  height: 90vh;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  font-size: 30px;
+  overflow-y: auto; 
+}
+
+.terminalWrap {
+  padding: 40px
+}
+
+.output {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.input {
+  display: flex;
+  align-items: center;
+}
+
+.prompt {
+  margin-right: 5px;
+}
+
+.command-line {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  flex-grow: 1;
+  font-family: inherit;
+  caret-color: #0f0; /* Green caret color */
+}
