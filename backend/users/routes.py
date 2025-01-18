@@ -103,7 +103,9 @@ def generate_login_url():
         login_url = f"http://my-rbc.us/login?token={token}"
         print(f"[DEBUG] Returning login URL: {login_url}")
 
-        return jsonify({'login_url': login_url}), 200
+        name = user['fname'] + " " + user['lname']
+
+        return jsonify({'login_url': login_url, 'name' : name}), 200
 
     except Exception as e:
         print(f"[ERROR] Exception occurred in generate_login_url: {str(e)}")
@@ -222,10 +224,7 @@ def login():
                 {'user_id': user_id},
                 {'$set': {'updated': True}}
             )
-        else:
-            print(f"[ERROR] User already referred someone")
-            return jsonify({'error': 'User already referred someone'}), 400
-
+       
         print(f"[DEBUG] Returning combined user & session info")
         return jsonify({
             'user': user_info,
