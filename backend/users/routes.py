@@ -224,10 +224,7 @@ def login():
                 {'user_id': user_id},
                 {'$set': {'updated': True}}
             )
-        else:
-            print(f"[ERROR] User already referred someone")
-            return jsonify({'error': 'User already referred someone'}), 400
-
+       
         print(f"[DEBUG] Returning combined user & session info")
         return jsonify({
             'user': user_info,
