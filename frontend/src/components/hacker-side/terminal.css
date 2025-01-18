@@ -3,16 +3,23 @@
   color: #0f0;
   font-family: 'Courier New', Courier, monospace;
   padding: 40px;
+  padding-bottom: 30px;
 
-  height: 80vh;
+  height: 85vh;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  border-color: grey;
+  border-width: 3px;
   font-size: 30px;
   overflow-y: auto; 
 }
 
 .terminalWrap {
-  padding: 40px
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 50px;
+  padding-top: 32px;
+  background-color: black;
+  
 }
 
 .output {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Navbar from '../nav/navbar';
 
 const Statistics = () => {
   // Hardcoded statistics for now
@@ -9,6 +10,7 @@ const Statistics = () => {
     averagePerVictim: 2939.45,
     lastHack: '2 minutes ago'
   };
+  
 
   return (
     <div className="min-h-screen bg-black text-green-500 p-8">
