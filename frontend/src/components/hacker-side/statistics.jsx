@@ -1,13 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import Navbar from '../nav/navbar';
 
 const Statistics = () => {
+    const [data, setData] = useState([]);
+  
+    useEffect(() => {
+        fetch('http://localhost:5000/users/most_loot')
+          .then((response) => response.json())
+          .then((data) => setData(data));
+    }, []);
+      
+     
   // Hardcoded statistics for now
   const stats = {
-    totalMoney: 1234567.89,
-    totalVictims: 420,
-    averagePerVictim: 2939.45,
+    totalMoney: data.reduce((acc, row) => acc + row.loot, 0),
+    totalVictims: data.length,
+    averagePerVictim: data.reduce((acc, row) => acc + row.loot, 0) / data.length,
     lastHack: '2 minutes ago'
   };
   
@@ -24,7 +34,7 @@ const Statistics = () => {
         >
           <StatCard
             title="Total Money Stolen"
-            value={`$${stats.totalMoney.toLocaleString()}`}
+            value={stats.totalMoney.toLocaleString()}
           />
           <StatCard
             title="Total Victims"

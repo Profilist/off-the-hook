@@ -51,7 +51,8 @@
   
   letter-spacing: .15em; 
   text-align: left; /* Ensures the typing starts from the left */
-  animation: typing 3.5s steps(40, end)
+  animation: typing 3.5s steps(40, end);
+  font-weight: bold;
 }
 
 /* The typing effect */

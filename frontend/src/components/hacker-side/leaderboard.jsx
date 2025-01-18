@@ -1,34 +1,34 @@
 import React from 'react'
 import './leaderboard.css'
+import { useState, useEffect } from 'react';
 
 const Leaderboard = () => {
-    const data = [
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 },
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 },
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 },
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 }
-        ,
-      ];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+      fetch('http://localhost:5000/users/most_loot')
+        .then((response) => response.json())
+        .then((data) => setData(data));
+  }, []);
+    
+  const totalLoot = data.reduce((acc, row) => acc + row.loot, 0);
+  const numberOfEntries = data.length;
    
   return (
     <>
     <div className='leaderboard'>
         <div className='rankings'>
             <h1>Hacker Rankings</h1>
+            <h1>Loot: {totalLoot}</h1>
+            <h1>Length: {numberOfEntries}</h1>
+            <h1>Avg: {totalLoot / numberOfEntries}</h1>
             <table>
               <thead>
                 <tr>
-                  <th>Rank</th>
+                  <th style={{width: "10%"}}>Rank</th>
                   <th>Name</th>
                   <th>Money Scammed</th>
+                  <th>People Scammed</th>
                 </tr>
               </thead>
               <tbody>
@@ -36,7 +36,8 @@ const Leaderboard = () => {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{row.name}</td>
-                    <td>{row.money}</td>
+                    <td>{row.loot}</td>
+                    <td>{row.name}</td>
                   </tr>
                 ))}
               </tbody>
