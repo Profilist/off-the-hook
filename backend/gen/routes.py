@@ -4,7 +4,6 @@ from flask_cors import cross_origin
 from settings import Settings
 import openai
 from pymongo import MongoClient
-from mongodb.routes import fetch_user_and_sessions
 
 genai_routes = Blueprint('genai_routes', __name__)
 
@@ -16,7 +15,7 @@ client = MongoClient(config.mongodb.uri)
 db = client[config.mongodb.database_name]
 users_collection = db['user_profiles']
 
-@genai_routes.route('/generate_email/<user_id>', methods=['GET'])
+@genai_routes.route('/generate_email', methods=['GET'])
 @cross_origin()
 def generate_email(user_id):
     # try:

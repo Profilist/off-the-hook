@@ -6,7 +6,6 @@ import jwt
 from settings import Settings
 from flask_cors import cross_origin
 
-
 # Load configuration
 config = Settings()
 
@@ -14,7 +13,7 @@ config = Settings()
 client = MongoClient(config.mongodb.uri)
 db = client["db"]
 
-mongo_routes = Blueprint('mongo_routes', __name__)
+user_routes = Blueprint('mongo_routes', __name__)
 
 # --------------------------------------------------------------------------
 # 1. generate_login_url: 
@@ -22,7 +21,7 @@ mongo_routes = Blueprint('mongo_routes', __name__)
 #    - Create new session in session_data
 #    - Return a login URL with JWT token
 # --------------------------------------------------------------------------
-@mongo_routes.route('/generate_login_url/<user_id>', methods=['GET'])
+@user_routes.route('/generate_login_url/<user_id>', methods=['GET'])
 @cross_origin()
 def generate_login_url(user_id):
     """
@@ -88,7 +87,6 @@ def generate_login_url(user_id):
         print(f"[ERROR] Exception occurred in generate_login_url: {str(e)}")
         return jsonify({'error': str(e)}), 400
 
-
 # --------------------------------------------------------------------------
 # 2. login:
 #    - Decode JWT token
@@ -96,7 +94,7 @@ def generate_login_url(user_id):
 #    - Validate and update session in session_data
 #    - Return user + session info
 # --------------------------------------------------------------------------
-@mongo_routes.route('/login', methods=['GET'])
+@user_routes.route('/login', methods=['GET'])
 @cross_origin()
 def login():
     """
@@ -246,7 +244,7 @@ def fetch_user_and_sessions(user_id):
     return user_info, sessions
 
 
-@mongo_routes.route('/user/<user_id>', methods=['GET'])
+@user_routes.route('/user/<user_id>', methods=['GET'])
 @cross_origin()
 def get_user(user_id):
     """
@@ -275,7 +273,7 @@ def get_user(user_id):
 # 4. get_most_loot:
 #    - Pull top users from user_profiles (sorted by loot desc).
 # --------------------------------------------------------------------------
-@mongo_routes.route('/most_loot', methods=['GET'])
+@user_routes.route('/most_loot', methods=['GET'])
 @cross_origin()
 def get_most_loot():
     """
@@ -303,33 +301,3 @@ def get_most_loot():
     except Exception as e:
         print(f"[ERROR] Exception occurred in get_most_loot: {str(e)}")
         return jsonify({'error': str(e)}), 400
-
-@mongo_routes.route('/most_defense_score', methods=['GET'])
-@cross_origin()
-def get_most_defense_score():
-    """
-    Fetch users from user_profiles, sorted by 'defense_score' descending,
-    and return basic info (name, user_id, defense_score).
-    """
-    try:
-        print("[DEBUG] Received request to fetch users with the highest defense scores")
-
-        # 1) Query user_profiles, sort by defense_score descending
-        users_cursor = db.user_profiles.find().sort('defense_score', -1)
-
-        # 2) Build a list of user info
-        users_info = []
-        for user in users_cursor:
-            users_info.append({
-                'name': f"{user['fname']} {user['lname']}",
-                'user_id': user['user_id'],
-                'defense_score': user['defense_score']
-            })
-
-        print("[DEBUG] Returning most_defense_score info")
-        return jsonify(users_info), 200
-
-    except Exception as e:
-        print(f"[ERROR] Exception occurred in get_most_defense_score: {str(e)}")
-        return jsonify({'error': str(e)}), 400
-    
