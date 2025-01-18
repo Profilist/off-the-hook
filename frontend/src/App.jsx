@@ -1,16 +1,14 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HackedPage from './components/hacked';
-import PreventionGuide from './components/prevention';
-import ControlPanel from './components/control-panel';
+import { useState } from 'react'
+import './App.css'
+import Login from './components/login';
+import Money from './components/money';
 
-const App = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<HackedPage />} />
-      <Route path="/guide" element={<PreventionGuide />} />
-      <Route path="/control" element={<ControlPanel />} />
-    </Routes>
-  </BrowserRouter>
-);
+function App() {
+  return (
+    <>
+      <Money />
+    </>
+  )
+}
 
-export default App;
+export default App
