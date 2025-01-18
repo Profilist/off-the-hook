@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useAnimationControls } from "framer-motion";
 import MatrixRain from "../graphics/matrix-rain";
 import Book from "../graphics/book";
 import Statistics from "../hacker-side/statistics";
@@ -8,16 +8,20 @@ import HackerPerspective from "../hacker-side/hackerperspective";
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export default function Hacked() {
-  const [text, setText] = useState("YOU JUST GOT HACKED");
+  const { scrollY } = useScroll();
+  const controls = useAnimationControls();
+  const [text, setText] = useState("YOU GOT HACKED");
   const [isHacker, setIsHacker] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [subText, setSubText] = useState(
     "Learn how to prevent phishing attacks and secure your information."
   );
+  const [showTransition, setShowTransition] = useState(false);
+  const [showHackerPerspective, setShowHackerPerspective] = useState(false);
 
   const scrambleText = useCallback(() => {
     let iteration = 0;
-    const originalText = isHacker ? "WELCOME HACKER" : "YOU JUST GOT HACKED";
+    const originalText = isHacker ? "WELCOME HACKER" : "YOU GOT HACKED";
 
     const interval = setInterval(() => {
       setText((prevText) =>
@@ -46,27 +50,71 @@ export default function Hacked() {
     scrambleText();
   }, [scrambleText, isHacker]);
 
-  const handleSwitchSides = () => {
+  const smoothScrollToTop = () => {
+    const duration = 1000; // Duration in milliseconds
+    const start = window.pageYOffset;
+    const startTime = performance.now();
+
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3); // Cubic easing function
+
+    const animateScroll = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      const eased = easeOutCubic(progress);
+      const currentPosition = start * (1 - eased);
+      
+      window.scrollTo(0, currentPosition);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+      }
+    };
+
+    requestAnimationFrame(animateScroll);
+  };
+
+  const handleSwitchSides = async () => {
     if (isHacker) {
-      setShowStats(true);
+      // Start transition animation
+      setShowTransition(true);
+      
+      // Animate scroll to bottom
+      window.scrollTo({ 
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+      
+      // Wait for scroll and fade animations
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Show HackerPerspective
+      setShowHackerPerspective(true);
+      
+      // Wait a bit before removing the overlay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      setShowTransition(false);
     } else {
-      setIsHacker(true);
-      setSubText(
-        "Time to teach others the same lesson - for educational purposes only."
-      );
+      smoothScrollToTop();
+      
+      // Wait for scroll animation to complete before changing state
+      setTimeout(() => {
+        setIsHacker(true);
+        setSubText("Time to teach others the same lesson - for educational purposes only.");
+      }, 1000);
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-transparent text-white overflow-hidden">
-      <MatrixRain color={isHacker ? "#00cc33" : "#cc0000"} />
+    <div className={`relative min-h-screen ${showHackerPerspective ? 'bg-black' : 'bg-transparent'} text-white overflow-hidden flex flex-col`}>
+      {!showHackerPerspective && <MatrixRain color={isHacker ? "#00cc33" : "#cc0000"} />}
 
-      {showStats ? (
+      {showHackerPerspective ? (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-30 min-h-screen bg-black"
         >
           <HackerPerspective />
         </motion.div>
@@ -135,6 +183,17 @@ export default function Hacked() {
             className="relative z-10 text-center py-8 mt-8"
           ></motion.div>
         </>
+      )}
+      
+      {/* Transition overlay */}
+      {showTransition && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+          className="fixed inset-0 bg-black z-20"
+        />
       )}
     </div>
   );
