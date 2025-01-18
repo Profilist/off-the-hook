@@ -1,22 +1,15 @@
 import React from 'react'
 import './leaderboard.css'
+import { useState, useEffect } from 'react';
 
 const Leaderboard = () => {
-    const data = [
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 },
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 },
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 },
-        { name: "Larris", money: 24 },
-        { name: "Felix", money: 29 },
-        { name: "Chris", money: 32 }
-        ,
-      ];
+    const [data, setData] = useState([]);
+    useEffect(() => {
+      fetch('http://localhost:5000/mongo/most_loot')
+        .then((response) => response.json())
+        .then((data) => setData(data));
+    }, []);
+    
    
   return (
     <>
@@ -26,9 +19,10 @@ const Leaderboard = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Rank</th>
+                  <th style={{width: "10%"}}>Rank</th>
                   <th>Name</th>
                   <th>Money Scammed</th>
+                  <th>People Scammed</th>
                 </tr>
               </thead>
               <tbody>
@@ -36,7 +30,8 @@ const Leaderboard = () => {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{row.name}</td>
-                    <td>{row.money}</td>
+                    <td>{row.loot}</td>
+                    <td>{row.name}</td>
                   </tr>
                 ))}
               </tbody>
