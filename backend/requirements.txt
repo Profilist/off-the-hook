@@ -8,3 +8,4 @@ mongo
 wraps
 PyJWT
 sendgrid
+gunicorn
