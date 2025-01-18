@@ -3,10 +3,7 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta, timezone
 import uuid
 import jwt
-from settings import Settings
-
-# Load configuration
-config = Settings()
+from settings import config
 
 # Initialize MongoDB client and database
 client = MongoClient(config.mongodb.uri)
@@ -19,8 +16,22 @@ mongo_routes = Blueprint('mongo_routes', __name__)
 @mongo_routes.route('/generate_login_url/<user_id>', methods=['GET'])
 def generate_login_url(user_id):
     try:
+        # Debugging: Log the collections in the database
+        collections = db.list_collection_names()
+        print(f"Collections in database: {collections}")
+
+        # Debugging: Log the user_id received
+        print(f"Received user_id: '{user_id}'")
+
+        # Debugging: Log the JWT secret
+        print(f"JWT Secret: '{config.mongodb.jwt_settings.secret}'")
+
         # Find the user in the database
-        user = db.users.find_one({'user_id': user_id})
+        user = db.users.find_one({'user_id': user_id.strip()})
+        
+        # Debugging: Log the user found
+        print(f"User found: {user}")
+
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
@@ -35,11 +46,15 @@ def generate_login_url(user_id):
                 'session_id': session_id,
                 'exp': expiration_time
             },
-            config.mongodb.JWTSettings.secret,
-            algorithm=config.mongodb.JWTSettings.algorithm
+            config.mongodb.jwt_settings.secret,
+            algorithm=config.mongodb.jwt_settings.algorithm
         )
 
-        # Update the user's session details in the database
+        # Convert token to string if necessary (for Python 3.6+)
+        if isinstance(token, bytes):
+            token = token.decode('utf-8')
+
+        # Update the user document with the new session details
         db.users.update_one(
             {'user_id': user_id},
             {
@@ -52,36 +67,32 @@ def generate_login_url(user_id):
             }
         )
 
-        # Generate the login URL with the token
+        # Generate the login URL
         login_url = f"http://my-rbc.us/login?token={token}"
         return jsonify({'login_url': login_url}), 200
 
     except Exception as e:
+        print(f"Error: {e}")
         return jsonify({'error': str(e)}), 400
 
-# Route to handle auto-login using a token
+# Route to handle login using the JWT token
 @mongo_routes.route('/login', methods=['GET'])
 def login():
-    # Extract the token from the query parameters
     token = request.args.get('token')
     if not token:
         return jsonify({'error': 'Token is missing'}), 400
 
     try:
-        # Decode the JWT token
         data = jwt.decode(
             token,
-            config.mongodb.JWTSettings.secret,
-            algorithms=[config.mongodb.JWTSettings.algorithm]
+            config.mongodb.jwt_settings.secret,
+            algorithms=[config.mongodb.jwt_settings.algorithm]
         )
-
-        # Find the user in the database
         user_id = data['user_id']
         user = db.users.find_one({'user_id': user_id})
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
-        # Prepare user information to return
         user_info = {
             'name': f"{user['fname']} {user['lname']}",
             'balance': user['balance'],
@@ -104,8 +115,15 @@ def login():
 @mongo_routes.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
     try:
+        # Debugging: Log the user_id received
+        print(f"Received user_id: '{user_id}'")
+
         # Find the user in the database
-        user = db.users.find_one({'user_id': user_id})
+        user = db.users.find_one({'user_id': user_id.strip()})
+        
+        # Debugging: Log the user found
+        print(f"User found: {user}")
+
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
@@ -124,4 +142,5 @@ def get_user(user_id):
         return jsonify(user_info), 200
 
     except Exception as e:
+        print(f"Error: {e}")
         return jsonify({'error': str(e)}), 400
