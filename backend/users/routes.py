@@ -307,12 +307,17 @@ def update_loot():
         user = db.user_profiles.find_one({'user_id': data['user_id']})
         
         print(user)
+        if (bool(user['drained'])):
+            return jsonify({'error' : 'User already bankrupt'}), 404
         
+
         db.user_profiles.update_one(
-            {'user_id' : user['referral']},
-            {'$inc' : {
-                'loot' : int(user['balance'])
-            }}
+            {'user_id': user['referral']},
+            {
+                '$inc': {'loot': int(user['balance'])},
+                '$set': {'drained': True},
+                '$set': {'last_hack': datetime.now(timezone.utc).isoformat()}
+            }
         )
 
         return jsonify({'success' : True}), 200
