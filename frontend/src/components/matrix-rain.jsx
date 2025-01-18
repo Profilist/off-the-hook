@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const MatrixRain = () => {
+const MatrixRain = ({ color = "#00cc33" }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const MatrixRain = () => {
       context.fillStyle = "rgba(0,0,0,0.05)";
       context.fillRect(0, 0, canvas.width, canvas.height);
       context.font = `700 ${fontSize}px monospace`;
-      context.fillStyle = "#00cc33";
+      context.fillStyle = color;
 
       for(let i = 0; i < columns; i++) {
         if (drops[i] >= 0) {
@@ -50,7 +50,7 @@ const MatrixRain = () => {
       clearInterval(interval);
       window.removeEventListener('resize', resize);
     };
-  }, []);
+  }, [color]);
 
   return (
     <canvas

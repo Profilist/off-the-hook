@@ -2,7 +2,27 @@ import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import styles from './Book.module.css';
 
-const Book = () => {
+const Book = ({ isHacker }) => {
+  const content = isHacker ? {
+    // Content for hacker perspective
+    title: "Phishing Techniques Guide",
+    chapters: [
+      "Understanding Social Engineering",
+      "Creating Convincing Emails",
+      "Building Fake Landing Pages",
+      "Analyzing User Psychology"
+    ]
+  } : {
+    // Content for defense perspective
+    title: "Phishing Prevention Guide",
+    chapters: [
+      "Identifying Suspicious Emails",
+      "Verifying Sender Authenticity",
+      "Safe Browsing Practices",
+      "Password Security"
+    ]
+  };
+
   useEffect(() => {
     // Load PT Sans font
     const WebFont = window.WebFont;
@@ -15,7 +35,28 @@ const Book = () => {
     }
   }, []);
 
-  const phishingTips = {
+  const phishingTips = isHacker ? {
+    leftPage: {
+      title: "Creating Convincing Emails",
+      tips: [
+        "Study real bank email templates and formats",
+        "Use urgency to prompt immediate action",
+        "Craft professional-looking layouts",
+        "Include official-looking logos and branding",
+        "Create believable scenarios and contexts"
+      ]
+    },
+    rightPage: {
+      title: "Social Engineering Basics",
+      tips: [
+        "Understand human psychology and trust",
+        "Research target demographics",
+        "Use current events as pretexts",
+        "Leverage authority and familiarity",
+        "Create compelling call-to-actions"
+      ]
+    }
+  } : {
     leftPage: {
       title: "Spot Fake Banking Emails",
       tips: [
