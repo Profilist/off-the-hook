@@ -1,0 +1,146 @@
+[
+  {
+    "user_id": "fbac00f7-b45c-41d1-a18f-b322e073acac",
+    "fname": "Admin",
+    "lname": "User",
+    "email": "binaricyt0gmail.com",
+    "phone_number": "+1-555-100-1000",
+    "address": "100 Main St, Toronto, ON",
+    "age": 18,
+    "account_type": "Student Chequing",
+    "bank_cards": [
+      {
+        "card_type": "Visa Debit",
+        "card_number": "**** **** **** 1000",
+        "expiry_date": "1/29"
+      }
+    ],
+    "defense_score": 100,
+    "phished": false,
+    "loot": 100.0,
+    "referral": "",
+    "victims": 0,
+    "balance": 1947.6,
+    "updated": false
+  },
+  {
+    "user_id": "4fc1c421-da25-4ca4-b1ed-77cdb44ca75b",
+    "fname": "Jane",
+    "lname": "Smith",
+    "email": "pokemonfelix.xie@gmail.com",
+    "phone_number": "+1-555-101-1001",
+    "address": "101 Elm St, Toronto, ON",
+    "age": 19,
+    "account_type": "Savings",
+    "bank_cards": [
+      {
+        "card_type": "MasterCard",
+        "card_number": "**** **** **** 1001",
+        "expiry_date": "2/29"
+      }
+    ],
+    "defense_score": 99,
+    "phished": true,
+    "loot": 200.0,
+    "referral": "",
+    "victims": 0,
+    "balance": 6834.63,
+    "updated": false
+  },
+  {
+    "user_id": "b42ae8ca-6195-4179-b63d-63895e0205d3",
+    "fname": "Alice",
+    "lname": "Johnson",
+    "email": "felixxie04@gmail.com",
+    "phone_number": "+1-555-102-1002",
+    "address": "102 Maple St, Toronto, ON",
+    "age": 20,
+    "account_type": "Credit",
+    "bank_cards": [
+      {
+        "card_type": "AMEX",
+        "card_number": "**** **** **** 1002",
+        "expiry_date": "3/29"
+      }
+    ],
+    "defense_score": 98,
+    "phished": false,
+    "loot": 300.0,
+    "referral": "",
+    "victims": 0,
+    "balance": 3812.41,
+    "updated": false
+  },
+  {
+    "user_id": "ca70f56b-b543-4bc3-ad03-663b0c2582e3",
+    "fname": "Bob",
+    "lname": "Brown",
+    "email": "chrisyh.jiang@gmail.com",
+    "phone_number": "+1-555-103-1003",
+    "address": "103 Pine St, Toronto, ON",
+    "age": 21,
+    "account_type": "Investment",
+    "bank_cards": [
+      {
+        "card_type": "Visa Debit",
+        "card_number": "**** **** **** 1003",
+        "expiry_date": "4/29"
+      }
+    ],
+    "defense_score": 97,
+    "phished": true,
+    "loot": 400.0,
+    "referral": "",
+    "victims": 0,
+    "balance": 9963.71,
+    "updated": false
+  },
+  {
+    "user_id": "fa4c3b1b-2b59-4fc1-9713-793e49ffe25e",
+    "fname": "Charlie",
+    "lname": "Williams",
+    "email": "pokemonlarris.xie@gmail.com",
+    "phone_number": "+1-555-104-1004",
+    "address": "104 Main St, Toronto, ON",
+    "age": 22,
+    "account_type": "Student Chequing",
+    "bank_cards": [
+      {
+        "card_type": "MasterCard",
+        "card_number": "**** **** **** 1004",
+        "expiry_date": "5/29"
+      }
+    ],
+    "defense_score": 96,
+    "phished": false,
+    "loot": 500.0,
+    "referral": "",
+    "victims": 0,
+    "balance": 716.24,
+    "updated": false
+  },
+  {
+    "user_id": "79fb3fd9-0e56-4acd-9814-6290d6b12c36",
+    "fname": "Diana",
+    "lname": "Taylor",
+    "email": "owenguo66@gmail.com",
+    "phone_number": "+1-555-105-1005",
+    "address": "105 Elm St, Toronto, ON",
+    "age": 23,
+    "account_type": "Savings",
+    "bank_cards": [
+      {
+        "card_type": "AMEX",
+        "card_number": "**** **** **** 1005",
+        "expiry_date": "6/29"
+      }
+    ],
+    "defense_score": 95,
+    "phished": true,
+    "loot": 600.0,
+    "referral": "",
+    "victims": 0,
+    "balance": 2639.91,
+    "updated": false
+  }
+]

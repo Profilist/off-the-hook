@@ -1,0 +1,12 @@
+flask
+pydantic
+urllib3
+python-dotenv
+flask_cors
+pymongo
+mongo
+openai
+jwt
+wraps
+PyJWT
+sendgrid
