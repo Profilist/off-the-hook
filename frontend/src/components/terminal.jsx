@@ -8,8 +8,7 @@ const Terminal = () => {
   const handleKeyPress = (e) => {
     
     if (e.key === 'Enter') {
-    
-      setOutput((prev) => [...prev, `$ ${command}`]);
+      setOutput((prev) => [...prev,`/ $> ${command}`]);
       setCommand('');
     } else if (e.key === 'Backspace') {
       setCommand((prev) => prev.slice(0, -1));
