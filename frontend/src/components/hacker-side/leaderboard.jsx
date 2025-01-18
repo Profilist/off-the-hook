@@ -19,9 +19,6 @@ const Leaderboard = () => {
     <div className='leaderboard'>
         <div className='rankings'>
             <h1>Hacker Rankings</h1>
-            <h1>Loot: {totalLoot}</h1>
-            <h1>Length: {numberOfEntries}</h1>
-            <h1>Avg: {totalLoot / numberOfEntries}</h1>
             <table>
               <thead>
                 <tr>
