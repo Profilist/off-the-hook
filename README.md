@@ -5,16 +5,21 @@
 
 **Off the Hook** is a simulated phishing website designed to educate users about the dangers of phishing attacks through an engaging and interactive experience. This project mimics a banking website (RBC) and allows users to switch perspectives, transforming them into a "hacker" to understand the tactics used in phishing schemes. By sending fake banking emails, the site aims to raise awareness and help individuals avoid falling victim to similar scams.
 
+## Privacy Concerns
+No user data is ever stored, the input fields are simply to replicate a realistic phishing attack.
+
 ## Technologies
 
 - **Frontend**: 
-  - React
-  - Vite
-  - Tailwind CSS
+  - [![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
+  - [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff)](#)
+  - [![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](#)
+  - [![Vercel](https://img.shields.io/badge/Vercel-%23000000.svg?logo=vercel&logoColor=white)](#)
 
 - **Backend**: 
-  - Flask
-  - MongoDB
+  - [![Flask](https://img.shields.io/badge/Flask-000?logo=flask&logoColor=fff)](#)
+  - [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](#)
+  - [![OpenAI](https://img.shields.io/badge/ChatGPT-74aa9c?logo=openai&logoColor=white)](#)
   - Twilio for email services
 
 ## Features
