@@ -42,6 +42,8 @@ const Statistics = ({ userId }) => {
       
 
   const stats = {
+    fname: data.fname,
+    lname: data.lname,
     totalMoney: data.loot,
     totalVictims: data.victims,
     averagePerVictim: data.victims == 0 ? 0 : data.loot / data.victims,
@@ -58,6 +60,14 @@ const Statistics = ({ userId }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
+          <StatCard
+            title="First Name"
+            value={stats.fname}
+          />
+          <StatCard
+            title="Last Name"
+            value={stats.lname}
+          />
           <StatCard
             title="Total Money Stolen"
             value={stats.totalMoney}
