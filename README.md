@@ -25,7 +25,9 @@ No user data is ever stored, the input fields are simply to replicate a realisti
 ## Features
 
 - **Perspective Switch**: Users can switch between being a victim and a hacker, gaining insights into both sides of phishing attacks.
+- **Realistic Attacks**: Send realistic phishing emails to teach others about how to protect themselves. 
 - **Interactive Learning**: The site provides educational content on how to identify and prevent phishing attempts.
+- **Generative Chatbot**: Ask questions about phishing attacks using the hacker terminal.
 - **Smooth Animations**: Utilizes Framer Motion for visually appealing transitions and animations throughout the site.
 
 ## Installation
