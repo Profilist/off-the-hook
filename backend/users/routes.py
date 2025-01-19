@@ -190,7 +190,8 @@ def login():
             'phished': user['phished'],
             'loot': user['loot'],
             'referral': user['referral'],
-            'victims' : user['victims']
+            'victims' : user['victims'],
+            'last_hack' : user['last_hack']
         }
 
         session_info = {
