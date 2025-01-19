@@ -1,9 +1,9 @@
 # 🪝Off the Hook
-> An interactive phishing simulation platform that educates users about the dangers of phishing attacks by letting them experience both victim and hacker perspectives.
+> An interactive phishing ARG (alternate reality game) that educates users about the dangers of phishing attacks by letting them experience both victim and hacker perspectives.
 
 ## Overview
 
-**Off the Hook** is a simulated phishing website designed to educate users about the dangers of phishing attacks through an engaging and interactive experience. This project mimics a banking website (RBC) and allows users to switch perspectives, transforming them into a "hacker" to understand the tactics used in phishing schemes. By sending fake banking emails, the site aims to raise awareness and help individuals avoid falling victim to similar scams.
+**Off the Hook** is a simulated phishing ARG designed to educate users about the dangers of phishing attacks through an engaging and interactive experience. This project mimics a banking website (RBC) and allows users to switch perspectives, transforming them into a "hacker" to understand the tactics used in phishing schemes. By sending fake banking emails, the site aims to raise awareness and help individuals avoid falling victim to similar scams.
 
 ## Privacy Concerns
 No user data is ever stored, the input fields are simply to replicate a realistic phishing attack.
