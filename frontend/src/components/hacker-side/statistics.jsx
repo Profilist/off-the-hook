@@ -7,7 +7,7 @@ const Statistics = () => {
     const [data, setData] = useState([]);
   
     useEffect(() => {
-        fetch('http://localhost:5000/users/most_loot')
+        fetch('https://rbc-security.onrender.com/users/most_loot')
           .then((response) => response.json())
           .then((data) => setData(data));
     }, []);

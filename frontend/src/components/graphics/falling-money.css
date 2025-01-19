@@ -1,0 +1,29 @@
+.dollars-container {
+  position: relative; /* Ensures that the falling dollars are contained within this div */
+  height: 100vh; /* Adjust as necessary for the desired container height */
+  overflow: hidden; /* Prevents overflow of dollar signs outside the container */
+}
+
+.dollar {
+  top: -20px;
+  color: red; /* Dollar sign color */
+  animation: animate 5s linear forwards;
+  font-weight: bold; /* Make the dollar signs bold */
+  text-shadow: 0 0 5px #00ff00, 0 0 30px #00ff00, 0 0 50px #00ff00; /* Glowing effect */
+}
+
+@keyframes animate {
+  0% {
+    transform: translateY(50vh) rotate(0deg);
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}

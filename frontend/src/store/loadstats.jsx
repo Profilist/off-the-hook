@@ -8,7 +8,7 @@ const LoadStats = () => {
      
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://localhost:5000/users/most_loot');
+      const response = await fetch('https://rbc-security.onrender.com/users/most_loot');
       const data = await response.json();
       const totalLoot = data.reduce((acc, row) => acc + row.loot, 0);
       dispatch(setData(data));
