@@ -281,6 +281,7 @@ def fetch_user_and_sessions(user_id):
         'fname': user['fname'],
         'lname': user['lname'],
         'email': user['email'],
+        'balance' : user['balance'],
         'phone_number': user['phone_number'],
         'address': user['address'],
         'age': user['age'],
@@ -288,6 +289,7 @@ def fetch_user_and_sessions(user_id):
         'defense_score': user['defense_score'],
         'phished': user['phished'],
         'loot': user['loot'],
+        'victims' : user['victims'],
         'bank_cards': user.get('bank_cards', []),
     }
 
