@@ -9,6 +9,35 @@ const Terminal = () => {
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [chatting, setChatting] = useState(false);
+  const [gpt, setGpt] = useState('');
+  
+  const getGpt = async (q) => {
+    try {
+      const response = await fetch(
+        'https://rbc-security.onrender.com/users/respond',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            question: q,
+          }),
+        }
+      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'fail');
+      }
+
+      const data = await response.json();
+      console.log(data.response)
+      setOutput((prev) => [...prev, data.response])
+
+    }catch (error){
+        console.log(error)
+    }
+  }
 
   const makeUrl = async () => {
     try {
@@ -68,6 +97,8 @@ const Terminal = () => {
       console.error('Error sending email:', error.message);
     }
   };
+
+  
     
     const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -109,7 +140,7 @@ const Terminal = () => {
 
       else if (command === '/learn') {
         setOutput((prev) => [...prev, `/ $> ${command}`, 
-          'Hello, I am the Scam Bot. I am here to teach you how to scam people. Do you have any questions?']);
+          'Hello, I am the Scam Bot. I am here to teach you how to scam people. Do you have any questions? Type quit to exit chat.']);
           setCommand('');
           setChatting(true);
       }
@@ -122,8 +153,7 @@ const Terminal = () => {
       }
 
       else if (chatting) {
-        getGpt((prev) => [...prev, `/ $> ${command}`, 
-          'See you soon!'])
+        getGpt(command);
         setOutput((prev) => [...prev, `/ $> ${command}`, 
         gpt]);
         setCommand('');

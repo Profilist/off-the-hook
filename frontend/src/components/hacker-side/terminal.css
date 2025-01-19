@@ -44,6 +44,7 @@
   flex-grow: 1;
   font-family: inherit;
   caret-color: #0f0; /* Green caret color */
+  font-weight: bold;
 }
 .typewriter h1 {
   overflow: hidden; /* Ensures the content is not revealed until the animation */
@@ -53,6 +54,7 @@
   text-align: left; /* Ensures the typing starts from the left */
   animation: typing 3.5s steps(40, end);
   font-weight: bold;
+  animation: typing 3.5s steps(40, end)
 }
 
 /* The typing effect */
