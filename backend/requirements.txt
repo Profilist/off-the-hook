@@ -9,3 +9,4 @@ wraps
 PyJWT
 sendgrid
 gunicorn
+openai
