@@ -25,30 +25,50 @@ const Statistics = ({ userId }) => {
     const [victimStory, setVictimStory] = useState('');
   
     useEffect(() => {
-        // console.log(userId)
-        fetch(`https://rbc-security.onrender.com/users/get-user/${userId}`)
-          .then((response) => response.json())
-          .then((data) => setData(data.user));
-        
+        if (!userId) {
+            // Set dummy data if userId is invalid or not provided
+            setData({
+                fname: 'LeBron',
+                lname: 'James',
+                loot: 21550,
+                victims: 23,
+                last_hack: '2025-01-19T00:07:47.537702+00:00'
+            });
+            fetch('https://rbc-security.onrender.com/users/victim_story')
+              .then((response) => response.json())
+              .then((storyData) => {
+                  if (storyData.story) {
+                      setVictimStory(storyData.story);
+                  }
+              });
+
+            return; 
+        }
+
         fetch('https://rbc-security.onrender.com/users/victim_story')
           .then((response) => response.json())
           .then((storyData) => {
+            console.log(storyData)
               if (storyData.story) {
                   setVictimStory(storyData.story);
               }
           });
-        console.log(victimStory)
+
+        fetch(`https://rbc-security.onrender.com/users/get-user/${userId}`)
+          .then((response) => response.json())
+          .then((data) => setData(data.user));
     }, [userId]);
       
+    const formattedDate = new Date(data.last_hack).toLocaleDateString();
 
-  const stats = {
-    fname: data.fname,
-    lname: data.lname,
-    totalMoney: data.loot,
-    totalVictims: data.victims,
-    averagePerVictim: data.victims == 0 ? 0 : data.loot / data.victims,
-    lastHack: data.last_hack
-  };
+    const stats = {
+        fname: data.fname,
+        lname: data.lname,
+        totalMoney: data.loot,
+        totalVictims: data.victims,
+        averagePerVictim: data.victims === 0 ? 0 : Math.round(data.loot / data.victims),
+        lastHack: formattedDate
+    };
 
   return (
     <div className="min-h-screen bg-black text-green-500 p-8">
@@ -70,7 +90,7 @@ const Statistics = ({ userId }) => {
           />
           <StatCard
             title="Total Money Stolen"
-            value={stats.totalMoney}
+            value={`$${stats.totalMoney}`}
           />
           <StatCard
             title="Total Victims"
