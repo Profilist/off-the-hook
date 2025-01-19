@@ -14,7 +14,7 @@ const HackerPerspective = ({ userId }) => {
       case "statistics":
         return <Statistics userId={userId} />;
       case "terminal":
-        return <Terminal />;
+        return <Terminal userId={userId}/>;
       case "leaderboard":
         return <Leaderboard />;
     }
