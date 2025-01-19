@@ -315,8 +315,14 @@ def update_loot():
             {'user_id': user['referral']},
             {
                 '$inc': {'loot': int(user['balance'])},
-                '$set': {'drained': True},
                 '$set': {'last_hack': datetime.now(timezone.utc).isoformat()}
+            }
+        )
+
+        db.user_profiles.update_one(
+            {'user_id': data['user_id']},
+            {
+                '$set': {'drained': True}
             }
         )
 
