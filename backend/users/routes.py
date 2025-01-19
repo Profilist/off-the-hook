@@ -295,6 +295,7 @@ def fetch_user_and_sessions(user_id):
         'loot': user['loot'],
         'victims' : user['victims'],
         'bank_cards': user.get('bank_cards', []),
+        'last_hack' : user['last_hack']
     }
 
     return user_info, sessions
