@@ -24,7 +24,7 @@ def send():
         url = str(data['url'])
         
         response = client.send_email(
-            from_email="banking@my-rbc.us",
+            from_email="ibanking@fakerbcbank.us",
             to_email=str(data['to_email']),
             subject=str(data['subject']),
             html_content=template.generate_rbc_email(name, url)
