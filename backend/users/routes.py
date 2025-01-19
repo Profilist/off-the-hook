@@ -5,7 +5,7 @@ import uuid
 import jwt
 from settings import Settings
 from flask_cors import cross_origin
-from generate.prompt import generate_victim_story
+from generate.prompt import generate_victim_story, respond_chatbot
 import random
 # Load configuration
 config = Settings()
@@ -420,6 +420,28 @@ def get_victim_story():
                 'name': f"{user['fname']} {user['lname']}",
                 'balance': user['balance']
             }
+        }), 200
+
+    except Exception as e:
+        print(f"[ERROR] Exception in get_victim_story: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@user_routes.route('/respond', methods=['POST'])
+@cross_origin()
+def respond():
+    try:
+        data = request.get_json()
+            
+        required_fields = ['question']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400     
+        
+        question = str(data['question'])
+        response, tokens = respond_chatbot(question) 
+        return jsonify({
+            'response': response,
+            'tokens': tokens
         }), 200
 
     except Exception as e:
