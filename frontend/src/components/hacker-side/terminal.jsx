@@ -194,7 +194,7 @@ const Terminal = () => {
     <div className='terminalWrap'>
     <div className="terminal">
         <div className="typewriter">
-            <h1>Now it's your turn to scam some people.</h1>
+            <h1>Now it's your turn to enlighten others.</h1>
         </div>
     <div className="output">
         {output.map((line, index) => (
