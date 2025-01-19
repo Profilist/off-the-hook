@@ -1,26 +1,52 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import Navbar from '../nav/navbar';
+import Money from '../graphics/falling-money'
 
-const Statistics = () => {
+const TypewriterEffect = ({ text }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (index < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev + text[index]);
+        setIndex(index + 1);
+      }, 20); // Typing Speed
+      return () => clearTimeout(timeout);
+    }
+  }, [index, text]);
+
+  return <p className="text-white text-left text-lg font-semibold mb-4">{displayedText}</p>;
+};
+
+const Statistics = ({ userId }) => {
     const [data, setData] = useState([]);
+    const [victimStory, setVictimStory] = useState('');
   
     useEffect(() => {
-        fetch('https://rbc-security.onrender.com/users/most_loot')
+        // console.log(userId)
+        fetch(`https://rbc-security.onrender.com/users/get-user/${userId}`)
           .then((response) => response.json())
-          .then((data) => setData(data));
-    }, []);
+          .then((data) => setData(data.user));
+        
+        fetch('https://rbc-security.onrender.com/users/victim_story')
+          .then((response) => response.json())
+          .then((storyData) => {
+              if (storyData.story) {
+                  setVictimStory(storyData.story);
+              }
+          });
+        console.log(victimStory)
+    }, [userId]);
       
-     
-  // Hardcoded statistics for now
+
   const stats = {
-    totalMoney: data.reduce((acc, row) => acc + row.loot, 0),
-    totalVictims: data.length,
-    averagePerVictim: data.reduce((acc, row) => acc + row.loot, 0) / data.length,
-    lastHack: '2 minutes ago'
+    totalMoney: data.loot,
+    totalVictims: data.victims,
+    averagePerVictim: data.victims == 0 ? 0 : data.loot / data.victims,
+    lastHack: data.last_hack
   };
-  
 
   return (
     <div className="min-h-screen bg-black text-green-500 p-8">
@@ -34,15 +60,15 @@ const Statistics = () => {
         >
           <StatCard
             title="Total Money Stolen"
-            value={stats.totalMoney.toLocaleString()}
+            value={stats.totalMoney}
           />
           <StatCard
             title="Total Victims"
-            value={stats.totalVictims.toLocaleString()}
+            value={stats.totalVictims}
           />
           <StatCard
             title="Average per Victim"
-            value={`$${stats.averagePerVictim.toLocaleString()}`}
+            value={`$${stats.averagePerVictim}`}
           />
           <StatCard
             title="Last Hack"
@@ -50,7 +76,8 @@ const Statistics = () => {
           />
         </motion.div>
 
-        {/* Money Vacuum Animation Container */}
+        {/* Money Animation */}
+        
         <motion.div 
           className="w-full h-96 border-2 border-green-500 rounded-lg p-4"
           initial={{ opacity: 0 }}
@@ -58,7 +85,8 @@ const Statistics = () => {
           transition={{ delay: 0.5 }}
         >
           <div className="text-center text-gray-500">
-            Money Vacuum Animation Placeholder
+            <TypewriterEffect text={victimStory} />
+            <Money />
           </div>
         </motion.div>
       </div>

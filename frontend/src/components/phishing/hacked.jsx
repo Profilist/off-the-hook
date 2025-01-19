@@ -7,7 +7,7 @@ import styles from './hacked.module.css'
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-export default function Hacked() {
+export default function Hacked({ userId }) {
   const [text, setText] = useState("YOU GOT HACKED");
   const [isHacker, setIsHacker] = useState(false);
   const [subText, setSubText] = useState(
@@ -108,7 +108,7 @@ export default function Hacked() {
           transition={{ duration: 0.8 }}
           className="relative z-30 min-h-screen bg-black"
         >
-          <HackerPerspective />
+          <HackerPerspective userId={userId} />
         </motion.div>
       ) : (
         <div className="flex flex-col justify-center items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

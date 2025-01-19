@@ -6,13 +6,13 @@ import Statistics from './statistics';
 import Terminal from './terminal';
 import Leaderboard from './leaderboard';
 
-const HackerPerspective = () => {
+const HackerPerspective = ({ userId }) => {
   const [page, setPage] = useState("statistics"); // Default page
 
   const renderPage = () => {
     switch (page) {
       case "statistics":
-        return <Statistics />;
+        return <Statistics userId={userId} />;
       case "terminal":
         return <Terminal />;
       case "leaderboard":

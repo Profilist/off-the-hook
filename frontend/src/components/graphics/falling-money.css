@@ -14,7 +14,7 @@
 
 @keyframes animate {
   0% {
-    transform: translateY(50vh) rotate(0deg);
+    transform: translateY(0vh) rotate(0deg);
     opacity: 1;
   }
 

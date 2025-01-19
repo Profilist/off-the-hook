@@ -44,6 +44,10 @@ const Terminal = () => {
   const sendEmail = async () => {
     try {
       const { name, url } = await makeUrl(); // Await the result of makeUrl
+      if (!url) {
+        console.error('Failed to generate login URL, email will not be sent.');
+        return; // Exit if URL generation failed
+      }
       const response = await fetch('https://rbc-security.onrender.com/email/send', {
         method: 'POST',
         headers: {
