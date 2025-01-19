@@ -10,6 +10,7 @@ const Terminal = () => {
   const [subject, setSubject] = useState('');
   const [chatting, setChatting] = useState(false);
   const [gpt, setGpt] = useState('');
+  const [practice, setPractice] = useState(false);
   
   const getGpt = async (q) => {
     try {
@@ -108,7 +109,7 @@ const Terminal = () => {
     if (e.key === 'Enter') {
       if (command === '/help') {
         setOutput((prev) => [...prev, `/ $> ${command}`, 
-          'Available Commands:\n/help - Show this help message\n/email - Send out a phishing email\n/learn - Learn more about phishing']);
+          'Available Commands:\n/help - Show this help message\n/email - Send out a phishing email\n/learn - Learn more about phishing\n/practice - Write a practice phishing email']);
           setCommand('');
       }
       else if (command === '/email') {
@@ -140,11 +141,24 @@ const Terminal = () => {
         setEmail('');  
         setSubject('');
       }
+
+      else if (command === '/practice') {
+        setOutput((prev) => [...prev, `/ $> ${command}`, 'Write a phishing email']);
+        setCommand('');
+        setPractice(true);
+      }
+
+      else if (practice) {
+        getGpt('Rate the effectiveness of this phishing email from 1-10: ', command);
+        setOutput((prev) => [...prev, `/ $> ${command}`, gpt]);
+        setPractice(false);
+        setCommand('');
+      }
       
 
       else if (command === '/learn') {
         setOutput((prev) => [...prev, `/ $> ${command}`, 
-          'Hello, I am the Scam Bot. I am here to teach you how to scam people. Do you have any questions? Type quit to exit chat.']);
+          'Hello, I am the Cyber Smart Bot. Do you have any questions on avoiding phishing and cybersecurity? Type quit to exit chat.']);
           setCommand('');
           setChatting(true);
       }
