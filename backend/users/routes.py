@@ -4,6 +4,9 @@ from datetime import datetime, timedelta, timezone
 import uuid
 import jwt
 from settings import Settings
+from flask_cors import cross_origin
+from generate.prompt import generate_victim_story
+import random
 # Load configuration
 config = Settings()
 
@@ -376,3 +379,36 @@ def get_most_loot():
     except Exception as e:
         print(f"[ERROR] Exception occurred in get_most_loot: {str(e)}")
         return jsonify({'error': str(e)}), 400
+
+# --------------------------------------------------------------------------
+# Generate victim story for a random phished user
+# --------------------------------------------------------------------------
+@user_routes.route('/victim_story', methods=['GET'])
+@cross_origin()
+def get_victim_story():
+    try:
+        users = list(db.user_profiles.find({'phished': True}))
+        if not users:
+            return jsonify({'error': 'No phished users found'}), 404
+            
+        user = random.choice(users)
+        
+        story, tokens = generate_victim_story(
+            name=f"{user['fname']} {user['lname']}", 
+            amount=int(user['balance'])
+        )
+        
+        print(f"[DEBUG] Generated story for user: {user['fname']} {user['lname']}")
+        
+        return jsonify({
+            'story': story,
+            'tokens': tokens,
+            'user': {
+                'name': f"{user['fname']} {user['lname']}",
+                'balance': user['balance']
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"[ERROR] Exception in get_victim_story: {str(e)}")
+        return jsonify({'error': str(e)}), 500
