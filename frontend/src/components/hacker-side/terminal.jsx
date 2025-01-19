@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './terminal.css';
 import Navbar from '../nav/navbar';
 
-const Terminal = () => {
+const Terminal = ( {userId} ) => {
   const [command, setCommand] = useState('');
   const [output, setOutput] = useState([]);
   const [emailStage, setEmailStage] = useState(0);
@@ -51,7 +51,7 @@ const Terminal = () => {
           },
           body: JSON.stringify({
             email: email,
-            ref_id: '79fb3fd9-0e56-4acd-9814-6290d6b12c36',
+            ref_id: userId,
           }),
         }
       );
